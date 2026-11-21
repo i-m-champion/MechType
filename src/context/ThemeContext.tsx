@@ -63,6 +63,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     root.style.setProperty('--color-accent', themeConfig.accent);
     root.style.setProperty('--color-text', themeConfig.text);
     root.style.setProperty('--color-glow', themeConfig.glow);
+    root.style.setProperty('--color-accent-subtle', `${themeConfig.accent}18`);
+    root.style.setProperty('--color-accent-border', `${themeConfig.accent}55`);
   }, [themeConfig]);
 
   return (

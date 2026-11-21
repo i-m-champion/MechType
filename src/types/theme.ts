@@ -1,4 +1,13 @@
-export type KeycapTheme = 'industrial' | 'cyberpunk' | 'retro1984' | 'nordic' | 'crt';
+export type KeycapTheme =
+  | 'industrial'
+  | 'architectural_orange'
+  | 'architectural_green'
+  | 'architectural_yellow'
+  | 'architectural_blue'
+  | 'cyberpunk'
+  | 'retro1984'
+  | 'nordic'
+  | 'crt';
 
 export interface ThemeColors {
   id: KeycapTheme;
@@ -24,9 +33,9 @@ export interface ThemeColors {
 }
 
 export const THEME_CONFIGS: Record<KeycapTheme, ThemeColors> = {
-  industrial: {
-    id: 'industrial',
-    name: 'Pristine White Architectural',
+  architectural_orange: {
+    id: 'architectural_orange',
+    name: 'Architectural Orange',
     subtitle: 'Minimal pure white architectural canvas with stark typography & international orange',
     bg: '#ffffff',
     surface: '#ffffff',
@@ -42,7 +51,95 @@ export const THEME_CONFIGS: Record<KeycapTheme, ThemeColors> = {
     keycapActive: '#ff5500',
     modKeyBase: '#d1d5db',
     modKeyTop: '#f3f4f6',
-    glow: 'rgba(255, 85, 0, 0.2)',
+    glow: 'rgba(255, 85, 0, 0.25)',
+    scanlines: false,
+    isLight: true,
+  },
+  industrial: {
+    id: 'industrial',
+    name: 'Architectural Orange',
+    subtitle: 'Minimal pure white architectural canvas with stark typography & international orange',
+    bg: '#ffffff',
+    surface: '#ffffff',
+    panel: '#fbfbfb',
+    border: '#e5e7eb',
+    text: '#111827',
+    textMuted: '#6b7280',
+    accent: '#ff5500',
+    accentSecondary: '#ff2626',
+    keycapBase: '#e5e7eb',
+    keycapTop: '#ffffff',
+    keycapText: '#111827',
+    keycapActive: '#ff5500',
+    modKeyBase: '#d1d5db',
+    modKeyTop: '#f3f4f6',
+    glow: 'rgba(255, 85, 0, 0.25)',
+    scanlines: false,
+    isLight: true,
+  },
+  architectural_green: {
+    id: 'architectural_green',
+    name: 'Architectural Cyber Green',
+    subtitle: 'Minimal pure white canvas with stark typography & cyber emerald green',
+    bg: '#ffffff',
+    surface: '#ffffff',
+    panel: '#fbfbfb',
+    border: '#e5e7eb',
+    text: '#111827',
+    textMuted: '#6b7280',
+    accent: '#10b981',
+    accentSecondary: '#059669',
+    keycapBase: '#e5e7eb',
+    keycapTop: '#ffffff',
+    keycapText: '#111827',
+    keycapActive: '#10b981',
+    modKeyBase: '#d1d5db',
+    modKeyTop: '#f3f4f6',
+    glow: 'rgba(16, 185, 129, 0.25)',
+    scanlines: false,
+    isLight: true,
+  },
+  architectural_yellow: {
+    id: 'architectural_yellow',
+    name: 'Architectural Industrial Yellow',
+    subtitle: 'Minimal pure white canvas with stark typography & hazard cyber amber yellow',
+    bg: '#ffffff',
+    surface: '#ffffff',
+    panel: '#fbfbfb',
+    border: '#e5e7eb',
+    text: '#111827',
+    textMuted: '#6b7280',
+    accent: '#f59e0b',
+    accentSecondary: '#d97706',
+    keycapBase: '#e5e7eb',
+    keycapTop: '#ffffff',
+    keycapText: '#111827',
+    keycapActive: '#f59e0b',
+    modKeyBase: '#d1d5db',
+    modKeyTop: '#f3f4f6',
+    glow: 'rgba(245, 158, 11, 0.25)',
+    scanlines: false,
+    isLight: true,
+  },
+  architectural_blue: {
+    id: 'architectural_blue',
+    name: 'Architectural Electric Blue',
+    subtitle: 'Minimal pure white canvas with stark typography & technical blueprint cyan',
+    bg: '#ffffff',
+    surface: '#ffffff',
+    panel: '#fbfbfb',
+    border: '#e5e7eb',
+    text: '#111827',
+    textMuted: '#6b7280',
+    accent: '#0284c7',
+    accentSecondary: '#0369a1',
+    keycapBase: '#e5e7eb',
+    keycapTop: '#ffffff',
+    keycapText: '#111827',
+    keycapActive: '#0284c7',
+    modKeyBase: '#d1d5db',
+    modKeyTop: '#f3f4f6',
+    glow: 'rgba(2, 132, 199, 0.25)',
     scanlines: false,
     isLight: true,
   },

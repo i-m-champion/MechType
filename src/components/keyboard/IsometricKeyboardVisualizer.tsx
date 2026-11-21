@@ -265,11 +265,14 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
           <div className="flex items-center gap-1 bg-neutral-100 p-1 rounded-lg border border-neutral-200">
             <span className="text-[10px] font-mono text-neutral-500 px-1 font-bold">Theme:</span>
             <select
-              value={theme}
+              value={theme === 'industrial' ? 'architectural_orange' : theme}
               onChange={(e) => setTheme(e.target.value as any)}
               className="bg-transparent text-[11px] font-mono font-bold text-neutral-900 focus:outline-none cursor-pointer"
             >
-              <option value="industrial" className="bg-white text-neutral-900">Pristine White Architectural</option>
+              <option value="architectural_orange" className="bg-white text-neutral-900">Architectural Orange</option>
+              <option value="architectural_green" className="bg-white text-neutral-900">Architectural Cyber Green</option>
+              <option value="architectural_yellow" className="bg-white text-neutral-900">Architectural Industrial Yellow</option>
+              <option value="architectural_blue" className="bg-white text-neutral-900">Architectural Electric Blue</option>
               <option value="cyberpunk" className="bg-white text-neutral-900">Cyberpunk Neon</option>
               <option value="retro1984" className="bg-white text-neutral-900">Retro 1984 Beige</option>
               <option value="nordic" className="bg-white text-neutral-900">Nordic Minimal Slate</option>

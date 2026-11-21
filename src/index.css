@@ -33,12 +33,12 @@
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff5500;
+  background: var(--color-accent, #ff5500);
 }
 
 /* Pristine All-White Architectural Grid */
 .architectural-grid {
-  background-color: #ffffff;
+  background-color: var(--color-bg, #ffffff);
   background-image: 
     linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
@@ -57,7 +57,7 @@
   font-family: 'Space Mono', monospace;
   font-size: 13px;
   font-weight: bold;
-  color: #ff5500;
+  color: var(--color-accent, #ff5500);
   pointer-events: none;
 }
 .corner-crosshair::after {
@@ -68,7 +68,7 @@
   font-family: 'Space Mono', monospace;
   font-size: 13px;
   font-weight: bold;
-  color: #ff5500;
+  color: var(--color-accent, #ff5500);
   pointer-events: none;
 }
 
@@ -116,13 +116,15 @@
   text-transform: uppercase;
 }
 
-/* Orange pill button */
-.btn-orange-pill {
-  background-color: #ff5500;
+/* Pill button styled dynamically to current active UI colorway */
+.btn-orange-pill,
+.btn-accent-pill {
+  background-color: var(--color-accent, #ff5500);
   color: #ffffff;
   transition: all 0.15s ease-in-out;
 }
-.btn-orange-pill:hover {
-  background-color: #ff3c00;
-  box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);
+.btn-orange-pill:hover,
+.btn-accent-pill:hover {
+  filter: brightness(0.92);
+  box-shadow: 0 4px 18px var(--color-glow, rgba(255, 85, 0, 0.35));
 }

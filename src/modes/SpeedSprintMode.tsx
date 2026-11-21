@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { soundEngine } from '../audio/SoundEngine';
 import { historyService } from '../services/historyService';
+import { useTheme } from '../context/ThemeContext';
 import {
   RotateCcw,
   Clock,
@@ -67,6 +68,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
   onParticleTrigger,
   onWpmUpdate,
 }) => {
+  const { themeConfig } = useTheme();
   const [duration, setDuration] = useState<number>(30); // 15, 30, 60, 120
   const [timeLeft, setTimeLeft] = useState<number>(30);
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -314,7 +316,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
       <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs gap-3">
         {/* Time Selector */}
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#ff5500]" />
+          <Clock className="w-4 h-4 transition-colors" style={{ color: themeConfig.accent }} />
           <span className="text-xs font-mono text-neutral-500 uppercase">Duration:</span>
           {[15, 30, 60, 120].map((t) => (
             <button
@@ -325,9 +327,10 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
               }}
               className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
                 duration === t
-                  ? 'bg-neutral-100 text-neutral-900 font-bold border border-[#ff5500] shadow-xs'
+                  ? 'bg-neutral-100 text-neutral-900 font-bold border shadow-xs'
                   : 'text-neutral-500 hover:text-neutral-900'
               }`}
+              style={duration === t ? { borderColor: themeConfig.accent } : undefined}
             >
               {t}s
             </button>
@@ -348,11 +351,12 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
             <span
               className={`text-lg font-mono font-black transition-colors ${
                 currentTier === 'overdrive'
-                  ? 'text-[#ff5500] animate-pulse'
+                  ? 'animate-pulse'
                   : currentTier === 'combustion'
                   ? 'text-orange-600'
                   : 'text-neutral-900'
               }`}
+              style={currentTier === 'overdrive' ? { color: themeConfig.accent } : undefined}
             >
               {wpm}
             </span>
@@ -428,7 +432,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
                     let isCaretHere = charIdx === typedChars.length;
 
                     if (typedChar !== undefined) {
-                      charColor = typedChar === char ? 'text-[#ff5500] font-bold' : 'text-rose-600 bg-rose-50 font-bold rounded';
+                      charColor = typedChar === char ? 'font-bold' : 'text-rose-600 bg-rose-50 font-bold rounded';
                     }
 
                     return (
@@ -436,10 +440,12 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
                         key={charIdx}
                         ref={isCaretHere ? activeCharSpanRef : null}
                         className={`relative ${charColor}`}
+                        style={typedChar === char ? { color: themeConfig.accent } : undefined}
                       >
                         {isCaretHere && (
                           <span
-                            className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse bg-[#ff5500]"
+                            className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse"
+                            style={{ backgroundColor: themeConfig.accent }}
                           />
                         )}
                         {char}
@@ -459,7 +465,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
                   {typedChars.length >= word.length && (
                     <span
                       ref={activeCharSpanRef}
-                      className="w-0.5 h-7 animate-pulse inline-block align-middle ml-0.5 bg-[#ff5500]"
+                      className="w-0.5 h-7 animate-pulse inline-block align-middle ml-0.5"
+                      style={{ backgroundColor: themeConfig.accent }}
                     />
                   )}
                 </span>
@@ -476,7 +483,10 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
 
         {!isActive && !isFinished && (
           <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest animate-pulse px-3.5 py-1.5 rounded-lg bg-white border border-[#ff5500] shadow-sm text-[#ff5500]">
+            <span
+              className="text-xs font-mono font-bold uppercase tracking-widest animate-pulse px-3.5 py-1.5 rounded-lg bg-white border shadow-sm"
+              style={{ borderColor: themeConfig.accent, color: themeConfig.accent }}
+            >
               CLICK OR PRESS ANY KEY TO INITIALIZE SPRINT
             </span>
           </div>
@@ -487,16 +497,16 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
       {isFinished && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="w-full max-w-md p-6 rounded-2xl bg-white border border-neutral-200 shadow-2xl flex flex-col items-center">
-            <Award className="w-12 h-12 text-[#ff5500] mb-3 animate-bounce" />
+            <Award className="w-12 h-12 mb-3 animate-bounce" style={{ color: themeConfig.accent }} />
             <h3 className="text-2xl font-mono font-black text-neutral-900 tracking-wider">
               SPEED SPRINT COMPLETE
             </h3>
-            <p className="text-xs font-mono text-[#ff5500] mb-6 font-bold uppercase">BENCHMARK CERTIFIED</p>
+            <p className="text-xs font-mono mb-6 font-bold uppercase" style={{ color: themeConfig.accent }}>BENCHMARK CERTIFIED</p>
 
             <div className="grid grid-cols-2 gap-4 w-full mb-6">
               <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center">
                 <span className="text-xs font-mono text-neutral-500 uppercase">Net WPM</span>
-                <span className="text-3xl font-mono font-black text-[#ff5500]">{wpm}</span>
+                <span className="text-3xl font-mono font-black" style={{ color: themeConfig.accent }}>{wpm}</span>
               </div>
               <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center">
                 <span className="text-xs font-mono text-neutral-500 uppercase">Raw WPM</span>
@@ -514,7 +524,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
 
             <button
               onClick={() => resetTest()}
-              className="btn-orange-pill w-full py-3 rounded-xl font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 shadow-md"
+              className="btn-accent-pill w-full py-3 rounded-xl font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 shadow-md text-white"
+              style={{ backgroundColor: themeConfig.accent }}
             >
               <RotateCcw className="w-4 h-4" />
               REPEAT SPRINT
