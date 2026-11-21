@@ -4,14 +4,15 @@
 
 @layer base {
   :root {
-    --color-bg: #ebebed;
-    --color-surface: #ffffff;
+    --color-bg: #08090d;
+    --color-surface: #0f1219;
     --color-accent: #ff5500;
+    --color-text: #ffffff;
   }
 
   body {
     background-color: var(--color-bg);
-    color: var(--color-text, #090a0d);
+    color: var(--color-text, #ffffff);
     font-family: 'Space Grotesk', system-ui, sans-serif;
     overflow-x: hidden;
   }
@@ -23,21 +24,22 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #ebebed;
+  background: #08090d;
 }
 ::-webkit-scrollbar-thumb {
-  background: #bebec6;
+  background: #232838;
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #ff5500;
 }
 
-/* Architectural Engineering Grid */
+/* Architectural Dark Engineering Grid */
 .architectural-grid {
+  background-color: #08090d;
   background-image: 
-    linear-gradient(to right, rgba(200, 200, 208, 0.45) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(200, 200, 208, 0.45) 1px, transparent 1px);
+    linear-gradient(to right, rgba(35, 40, 56, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(35, 40, 56, 0.5) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -48,21 +50,23 @@
 .corner-crosshair::before {
   content: '+';
   position: absolute;
-  top: -7px;
-  left: -5px;
+  top: -8px;
+  left: -6px;
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: #888892;
+  font-size: 13px;
+  font-weight: bold;
+  color: #ff5500;
   pointer-events: none;
 }
 .corner-crosshair::after {
   content: '+';
   position: absolute;
-  bottom: -7px;
-  right: -5px;
+  bottom: -8px;
+  right: -6px;
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: #888892;
+  font-size: 13px;
+  font-weight: bold;
+  color: #ff5500;
   pointer-events: none;
 }
 
@@ -71,7 +75,7 @@
   pointer-events: none;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.15) 50%
+    rgba(0, 0, 0, 0.25) 50%
   ), linear-gradient(
     90deg,
     rgba(255, 0, 0, 0.03),
@@ -118,5 +122,5 @@
 }
 .btn-orange-pill:hover {
   background-color: #ff3c00;
-  box-shadow: 0 4px 14px rgba(255, 85, 0, 0.35);
+  box-shadow: 0 4px 18px rgba(255, 85, 0, 0.45);
 }

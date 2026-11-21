@@ -59,7 +59,7 @@ export const RadialSpeedometer: React.FC<RadialSpeedometerProps> = ({ wpm, kps }
           <path
             d="M 20 100 A 80 80 0 0 1 180 100"
             fill="none"
-            stroke={themeConfig.isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.08)'}
+            stroke="rgba(255, 255, 255, 0.1)"
             strokeWidth="12"
             strokeLinecap="round"
           />
@@ -68,7 +68,7 @@ export const RadialSpeedometer: React.FC<RadialSpeedometerProps> = ({ wpm, kps }
           <path
             d="M 20 100 A 80 80 0 0 1 45 45"
             fill="none"
-            stroke={themeConfig.isLight ? '#0ea5e9' : '#00f0ff'}
+            stroke="#00f0ff"
             strokeWidth="8"
             strokeLinecap="round"
             opacity="0.8"
@@ -78,7 +78,7 @@ export const RadialSpeedometer: React.FC<RadialSpeedometerProps> = ({ wpm, kps }
           <path
             d="M 45 45 A 80 80 0 0 1 125 25"
             fill="none"
-            stroke={themeConfig.isLight ? '#f59e0b' : '#ffaa00'}
+            stroke="#ffaa00"
             strokeWidth="8"
             opacity="0.8"
           />
@@ -107,7 +107,7 @@ export const RadialSpeedometer: React.FC<RadialSpeedometerProps> = ({ wpm, kps }
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                stroke={themeConfig.isLight ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.4)'}
+                stroke="rgba(255, 255, 255, 0.4)"
                 strokeWidth="2"
               />
             );
@@ -118,16 +118,16 @@ export const RadialSpeedometer: React.FC<RadialSpeedometerProps> = ({ wpm, kps }
             <polygon
               points="97,100 100,22 103,100"
               fill={isRedline ? '#ff5500' : themeConfig.accent}
-              filter={themeConfig.isLight ? undefined : 'drop-shadow(0 0 6px rgba(0, 240, 255, 0.8))'}
+              filter="drop-shadow(0 0 6px rgba(255, 85, 0, 0.8))"
             />
-            <circle cx="100" cy="100" r="7" fill={themeConfig.isLight ? '#090a0d' : '#ffffff'} />
-            <circle cx="100" cy="100" r="4" fill={themeConfig.isLight ? '#ffffff' : '#0a0d14'} />
+            <circle cx="100" cy="100" r="7" fill="#ffffff" />
+            <circle cx="100" cy="100" r="4" fill="#08090d" />
           </g>
         </svg>
 
         {/* Digital Readout */}
         <div className="absolute bottom-0 flex flex-col items-center">
-          <div className="text-2xl font-mono font-black tracking-tight" style={{ color: isRedline ? '#ff5500' : themeConfig.accent }}>
+          <div className="text-2xl font-mono font-black tracking-tight" style={{ color: isRedline ? '#ff5500' : '#ffffff' }}>
             {Math.round(smoothWpm)}
           </div>
           <div className="text-[10px] font-mono text-neutral-400 uppercase -mt-1 font-bold">

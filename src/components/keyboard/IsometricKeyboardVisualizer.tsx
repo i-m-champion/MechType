@@ -353,7 +353,7 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
                     style={{
                       backgroundColor: isPressed ? themeConfig.keycapActive : topBg,
                       color: isPressed
-                        ? (themeConfig.isLight ? '#ffffff' : '#000000')
+                        ? '#ffffff'
                         : isWeak
                         ? '#f43f5e'
                         : themeConfig.keycapText,
@@ -361,16 +361,12 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
                         ? '#f43f5e'
                         : isPressed
                         ? themeConfig.accent
-                        : themeConfig.isLight
-                        ? 'rgba(0,0,0,0.12)'
-                        : 'rgba(255,255,255,0.06)',
+                        : '#2e3447',
                       boxShadow: isWeak
                         ? `0 0 12px rgba(244, 63, 94, 0.8)`
                         : isPressed
                         ? `0 0 16px ${themeConfig.accent}`
-                        : themeConfig.isLight
-                        ? 'inset 0 1px 1px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.06)'
-                        : 'inset 0 1px 1px rgba(255,255,255,0.15)',
+                        : 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.4)',
                     }}
                   >
                     {/* Top sublabel if exists */}

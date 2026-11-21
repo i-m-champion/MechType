@@ -11,7 +11,6 @@ import {
   Activity,
   Search,
   Keyboard as KeyboardIcon,
-  Sparkles,
 } from 'lucide-react';
 
 export type GameMode =
@@ -68,51 +67,45 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
   ];
 
   return (
-    <header
-      className="w-full border-b sticky top-0 z-40 transition-colors backdrop-blur-md"
-      style={{
-        backgroundColor: `${themeConfig.surface}f5`,
-        borderColor: themeConfig.border,
-      }}
-    >
+    <header className="w-full border-b border-[#232838] sticky top-0 z-40 transition-colors backdrop-blur-md bg-[#08090d]/90 text-white">
       <div className="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         {/* Left: ChainGPT Labs / Stols inspired Brand Monogram */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 p-1.5 px-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 shadow-sm">
+          <div className="flex items-center gap-2 p-1.5 px-2.5 rounded-lg border border-[#232838] bg-[#141824] shadow-sm">
             {/* Robot / Terminal Face Monogram */}
-            <div className="w-5 h-5 rounded bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-bold text-[10px]">
+            <div className="w-5 h-5 rounded bg-[#ff5500] text-white flex items-center justify-center font-bold text-[10px]">
               ::
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-extrabold tracking-wider text-[11px] font-display-chamfer">
+              <span className="font-extrabold tracking-wider text-[11px] font-display-chamfer text-white">
                 MECHTYPE
               </span>
-              <span className="text-[8px] tracking-widest text-neutral-500 font-bold uppercase">
+              <span className="text-[8px] tracking-widest text-[#ff5500] font-bold uppercase">
                 LABS // 2024
               </span>
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1.5 text-neutral-400 pl-2 border-l border-neutral-300 dark:border-neutral-800">
+          <div className="hidden sm:flex items-center gap-1.5 text-neutral-400 pl-2 border-l border-[#232838]">
             <span>←</span>
-            <span className="hover:text-neutral-700 dark:hover:text-neutral-200 cursor-pointer">
+            <span className="hover:text-white cursor-pointer transition-colors">
               Sensory Lab
             </span>
           </div>
         </div>
 
         {/* Center: Mode Tabs inspired by [ Portfolio ] Blog :: Our Ecosystem */}
-        <nav className="flex items-center gap-1 overflow-x-auto max-w-full py-1">
+        <nav className="flex items-center gap-1.5 overflow-x-auto max-w-full py-1">
           {modes.map((m) => {
             const isActive = activeMode === m.id;
             return (
               <button
                 key={m.id}
                 onClick={() => onSelectMode(m.id)}
-                className={`px-2.5 py-1 rounded transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded transition-all whitespace-nowrap flex items-center gap-1.5 ${
                   isActive
-                    ? 'font-bold bg-neutral-900 text-white dark:bg-white dark:text-black shadow-sm'
-                    : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
+                    ? 'font-bold bg-[#1a202e] text-white border border-[#ff5500]/50 shadow-md'
+                    : 'text-neutral-400 hover:text-white hover:bg-[#141824]'
                 }`}
               >
                 {isActive && <span className="text-[#ff5500]">┌</span>}
@@ -126,21 +119,21 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
         {/* Right: Technical Controls & Orange "Apply Now" style Action */}
         <div className="flex items-center gap-2">
           {/* Switch Selector Pill */}
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
-            <KeyboardIcon className="w-3.5 h-3.5 text-neutral-500" />
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#232838] bg-[#141824]">
+            <KeyboardIcon className="w-3.5 h-3.5 text-[#ff5500]" />
             <select
               value={currentProfile}
               onChange={(e) => handleProfileChange(e.target.value as SoundProfileId)}
-              className="bg-transparent text-[11px] font-mono font-bold text-neutral-800 dark:text-neutral-200 focus:outline-none cursor-pointer max-w-[130px] truncate"
+              className="bg-transparent text-[11px] font-mono font-bold text-white focus:outline-none cursor-pointer max-w-[130px] truncate"
             >
-              <optgroup label="Mechanical Switches">
+              <optgroup label="Mechanical Switches" className="bg-[#141824] text-white">
                 {SOUND_PROFILES.filter((p) => p.category === 'mechanical').map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>
                 ))}
               </optgroup>
-              <optgroup label="Bonus Soundpacks">
+              <optgroup label="Bonus Soundpacks" className="bg-[#141824] text-white">
                 {SOUND_PROFILES.filter((p) => p.category === 'bonus').map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -153,10 +146,10 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* Lo-Fi Rhythm Harmonizer Sync */}
           <button
             onClick={handleToggleLofi}
-            className={`px-2 py-1 rounded border transition-colors flex items-center gap-1 text-[11px] ${
+            className={`px-2.5 py-1 rounded border transition-colors flex items-center gap-1.5 text-[11px] ${
               isLofiActive
-                ? 'bg-[#ff5500]/10 border-[#ff5500] text-[#ff5500] font-bold'
-                : 'border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
+                ? 'bg-[#ff5500]/20 border-[#ff5500] text-[#ff5500] font-bold shadow-md shadow-[#ff5500]/20 animate-pulse'
+                : 'border-[#232838] bg-[#141824] text-neutral-400 hover:text-white'
             }`}
             title="Toggle Ambient Lo-Fi Melodic Harmonizer"
           >
@@ -167,7 +160,7 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* 10-Finger Heatmap */}
           <button
             onClick={onOpenHeatmap}
-            className="p-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 text-neutral-600 dark:text-neutral-300"
+            className="p-1.5 rounded border border-[#232838] bg-[#141824] hover:border-[#ff5500] text-neutral-300 hover:text-white transition-colors"
             title="10-Finger Ergonomic Heatmap"
           >
             <Activity className="w-3.5 h-3.5" />
@@ -176,7 +169,7 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* Typo Autopsy */}
           <button
             onClick={onOpenAutopsy}
-            className="p-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 text-neutral-600 dark:text-neutral-300"
+            className="p-1.5 rounded border border-[#232838] bg-[#141824] hover:border-[#ff5500] text-neutral-300 hover:text-white transition-colors"
             title="Slow-Mo Typo Autopsy"
           >
             <Search className="w-3.5 h-3.5" />
@@ -185,7 +178,7 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* High-Impact Orange Pill Button (Inspired by APPLY NOW / APPLY FOR INCUBATION) */}
           <button
             onClick={onOpenSettings}
-            className="btn-orange-pill px-3 py-1.5 rounded font-mono font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
+            className="btn-orange-pill px-3 py-1.5 rounded font-mono font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-[#ff5500]/25"
           >
             <Sliders className="w-3.5 h-3.5" />
             <span>CALIBRATE</span>

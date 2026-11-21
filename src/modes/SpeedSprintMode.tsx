@@ -260,11 +260,11 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Test Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-slate-900/60 border border-neutral-300 dark:border-white/5 backdrop-blur-md gap-3">
+      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-[#0f1219] border border-[#232838] shadow-md gap-3">
         {/* Time Selector */}
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#ff5500] dark:text-cyan-400" />
-          <span className="text-xs font-mono text-neutral-500 uppercase">Duration:</span>
+          <Clock className="w-4 h-4 text-[#ff5500]" />
+          <span className="text-xs font-mono text-neutral-400 uppercase">Duration:</span>
           {[15, 30, 60, 120].map((t) => (
             <button
               key={t}
@@ -274,8 +274,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
               }}
               className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
                 duration === t
-                  ? 'bg-neutral-900 text-white dark:bg-cyan-500/20 dark:text-cyan-300 font-bold border border-neutral-900 dark:border-cyan-500/40 shadow-sm'
-                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-slate-200'
+                  ? 'bg-[#1c2230] text-white font-bold border border-[#ff5500] shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               {t}s
@@ -286,21 +286,21 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         {/* Live Metrics Display */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-neutral-500 uppercase">Timer:</span>
-            <span className="text-lg font-mono font-black text-neutral-900 dark:text-cyan-400">
+            <span className="text-xs font-mono text-neutral-400 uppercase">Timer:</span>
+            <span className="text-lg font-mono font-black text-white">
               {timeLeft}s
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-neutral-500 uppercase">WPM:</span>
+            <span className="text-xs font-mono text-neutral-400 uppercase">WPM:</span>
             <span
               className={`text-lg font-mono font-black transition-colors ${
                 currentTier === 'overdrive'
-                  ? 'text-[#ff5500] dark:text-cyan-300 animate-pulse'
+                  ? 'text-[#ff5500] animate-pulse'
                   : currentTier === 'combustion'
                   ? 'text-orange-500'
-                  : 'text-neutral-900 dark:text-slate-100'
+                  : 'text-white'
               }`}
             >
               {wpm}
@@ -308,8 +308,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-neutral-500 uppercase">Acc:</span>
-            <span className="text-lg font-mono font-black text-emerald-600 dark:text-emerald-400">
+            <span className="text-xs font-mono text-neutral-400 uppercase">Acc:</span>
+            <span className="text-lg font-mono font-black text-emerald-400">
               {correctChars + incorrectChars > 0
                 ? `${Math.round((correctChars / (correctChars + incorrectChars)) * 100)}%`
                 : '100%'}
@@ -318,7 +318,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
 
           <button
             onClick={() => resetTest()}
-            className="p-1.5 rounded-lg bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-slate-100 transition-colors shadow-sm"
+            className="p-1.5 rounded-lg bg-[#141824] border border-[#232838] text-neutral-300 hover:text-white transition-colors shadow-sm"
             title="Restart Test (Tab + Enter)"
           >
             <RotateCcw className="w-4 h-4" />
@@ -330,7 +330,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
       <div
         ref={containerRef}
         onClick={() => inputRef.current?.focus()}
-        className="w-full min-h-[170px] p-6 sm:p-8 rounded-2xl bg-neutral-50 dark:bg-slate-900/40 border border-neutral-300 dark:border-white/5 relative cursor-text overflow-hidden select-none shadow-sm"
+        className="w-full min-h-[170px] p-6 sm:p-8 rounded-2xl bg-[#08090d] border border-[#232838] relative cursor-text overflow-hidden select-none shadow-xl"
       >
         {/* Hidden Input for Touch & Focus */}
         <input
@@ -424,8 +424,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         </div>
 
         {!isActive && !isFinished && (
-          <div className="absolute inset-0 bg-neutral-100/40 dark:bg-black/20 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
-            <span className="text-xs font-mono text-neutral-600 dark:text-cyan-400/80 font-bold uppercase tracking-widest animate-pulse px-3 py-1.5 rounded-lg bg-white/80 dark:bg-black/60 border border-neutral-200 dark:border-white/10 shadow-sm">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+            <span className="text-xs font-mono text-white font-bold uppercase tracking-widest animate-pulse px-3.5 py-1.5 rounded-lg bg-[#0f1219] border border-[#ff5500]/40 shadow-md text-[#ff5500]">
               CLICK OR PRESS ANY KEY TO INITIALIZE SPRINT
             </span>
           </div>
