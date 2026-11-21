@@ -19,4 +19,10 @@ npm install
 npm run dev
 ```
 
-Visit `http://localhost:3000` to clack away!
+Visit the URL printed in the terminal (default `http://localhost:5173`).
+If port 5173 is also occupied, Vite will automatically switch to the next open port (5174, 5175, etc.).
+
+To force a specific port:
+```bash
+npm run dev -- --port 4000
+```
