@@ -73,15 +73,15 @@ export const ZenTypewriterMode: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Zen Header HUD */}
-      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 backdrop-blur-md gap-3">
+      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs gap-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+          <Sparkles className="w-4 h-4 text-[#ff5500]" />
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-800">
             ZEN TYPEWRITER // ASMR FREE-WRITING
           </span>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-400">
+        <div className="flex items-center gap-4 text-xs font-mono text-neutral-500">
           <span>{wordsCount} words</span>
           <span>•</span>
           <span>{charsCount} characters</span>
@@ -91,21 +91,21 @@ export const ZenTypewriterMode: React.FC = () => {
           <div className="flex items-center gap-1.5 ml-2">
             <button
               onClick={() => exportText('md')}
-              className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 flex items-center gap-1 transition-colors"
+              className="px-2 py-1 rounded bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-700 flex items-center gap-1 transition-colors"
               title="Export as Markdown (.md)"
             >
               <Download className="w-3.5 h-3.5" /> MD
             </button>
             <button
               onClick={() => exportText('txt')}
-              className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 flex items-center gap-1 transition-colors"
+              className="px-2 py-1 rounded bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-700 flex items-center gap-1 transition-colors"
               title="Export as Plain Text (.txt)"
             >
               <FileText className="w-3.5 h-3.5" /> TXT
             </button>
             <button
               onClick={clearContent}
-              className="p-1 rounded bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
+              className="p-1 rounded bg-neutral-50 hover:bg-rose-50 border border-neutral-200 text-neutral-500 hover:text-rose-600 transition-colors"
               title="Clear Document"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -116,11 +116,11 @@ export const ZenTypewriterMode: React.FC = () => {
 
       {/* Parchment Paper Container */}
       <div
-        className="w-full min-h-[500px] p-8 sm:p-12 rounded-2xl border shadow-2xl relative transition-all duration-300"
+        className="w-full min-h-[500px] p-8 sm:p-12 rounded-2xl border shadow-sm relative transition-all duration-300"
         style={{
-          backgroundColor: themeConfig.id === 'retro1984' ? '#ded4c1' : '#0d1117',
-          borderColor: themeConfig.id === 'retro1984' ? '#c2b69f' : 'rgba(255,255,255,0.08)',
-          color: themeConfig.id === 'retro1984' ? '#2e2720' : '#e2e8f0',
+          backgroundColor: themeConfig.id === 'retro1984' ? '#ded4c1' : '#ffffff',
+          borderColor: themeConfig.id === 'retro1984' ? '#c2b69f' : '#e5e7eb',
+          color: themeConfig.id === 'retro1984' ? '#2e2720' : '#111827',
         }}
       >
         <textarea

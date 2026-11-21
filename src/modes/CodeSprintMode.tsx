@@ -158,10 +158,10 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Language Header Bar */}
-      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 backdrop-blur-md gap-3">
+      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs gap-3">
         <div className="flex items-center gap-2">
-          <Code2 className="w-5 h-5 text-cyan-400" />
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+          <Code2 className="w-5 h-5 text-[#ff5500]" />
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-800">
             CODE SPRINT //
           </span>
           {(['javascript', 'python', 'rust', 'cpp'] as const).map((lang) => (
@@ -173,8 +173,8 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
               }}
               className={`px-2.5 py-1 text-xs font-mono uppercase rounded transition-colors ${
                 language === lang
-                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-neutral-100 text-[#ff5500] font-bold border border-[#ff5500] shadow-xs'
+                  : 'text-neutral-500 hover:text-neutral-900'
               }`}
             >
               {lang}
@@ -185,13 +185,13 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSnippetIdx((prev) => prev + 1)}
-            className="px-2.5 py-1 text-xs font-mono rounded bg-white/5 hover:bg-white/10 text-slate-300"
+            className="px-2.5 py-1 text-xs font-mono rounded bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-700"
           >
             Next Snippet
           </button>
           <button
             onClick={() => loadSnippet(language, snippetIdx)}
-            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-100"
+            className="p-1.5 rounded-lg bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-600 hover:text-neutral-900"
             title="Reset Snippet"
           >
             <RotateCcw className="w-4 h-4" />
@@ -202,7 +202,7 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
       {/* Code Editor Frame */}
       <div
         onClick={() => inputRef.current?.focus()}
-        className="w-full p-6 rounded-2xl bg-[#0d1117] border border-cyan-500/20 relative cursor-text overflow-hidden shadow-2xl font-mono text-base leading-relaxed"
+        className="w-full p-6 rounded-2xl bg-white border border-neutral-200/90 relative cursor-text overflow-hidden shadow-sm font-mono text-base leading-relaxed text-neutral-900"
       >
         <input
           ref={inputRef}
@@ -216,16 +216,16 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
         />
 
         {/* Editor Tab Bar */}
-        <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 text-xs text-slate-500">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-neutral-200 text-xs text-neutral-500">
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-            <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-            <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-            <span className="ml-2 font-mono text-slate-400">
+            <span className="w-3 h-3 rounded-full bg-rose-400 inline-block" />
+            <span className="w-3 h-3 rounded-full bg-amber-400 inline-block" />
+            <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" />
+            <span className="ml-2 font-mono text-neutral-700 font-semibold">
               snippet_{snippetIdx + 1}.{language === 'javascript' ? 'js' : language === 'python' ? 'py' : language === 'rust' ? 'rs' : 'cpp'}
             </span>
           </div>
-          <span className="text-[11px] text-cyan-400/80">
+          <span className="text-[11px] text-[#ff5500] font-bold">
             {typedIndex} / {targetCode.length} chars ({Math.round((typedIndex / Math.max(1, targetCode.length)) * 100)}%)
           </span>
         </div>
@@ -238,23 +238,22 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
             const hadError = errors.has(idx);
             const isPunct = isPunctuation(char);
 
-            let styleClass = 'text-slate-500';
+            let styleClass = 'text-neutral-400';
             if (isTyped) {
               styleClass = hadError
-                ? 'text-rose-400 bg-rose-500/20 rounded'
+                ? 'text-rose-600 bg-rose-100 rounded font-bold'
                 : isPunct
-                ? 'text-amber-400 font-bold'
-                : 'text-cyan-300';
+                ? 'text-amber-600 font-bold'
+                : 'text-[#ff5500] font-bold';
             } else if (isPunct) {
-              styleClass = 'text-amber-500/60 font-semibold';
+              styleClass = 'text-neutral-700 font-semibold';
             }
 
             return (
               <span key={idx} className={`relative ${styleClass}`}>
                 {isCurrent && (
                   <span
-                    className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse"
-                    style={{ backgroundColor: themeConfig.accent }}
+                    className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse bg-[#ff5500]"
                   />
                 )}
                 {char === '\n' ? '↵\n' : char}
@@ -264,17 +263,17 @@ export const CodeSprintMode: React.FC<CodeSprintProps> = ({
         </pre>
 
         {isFinished && (
-          <div className="mt-6 p-4 rounded-xl bg-cyan-950/40 border border-cyan-500/40 flex items-center justify-between">
+          <div className="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+              <CheckCircle2 className="w-6 h-6 text-emerald-600" />
               <div>
-                <div className="text-sm font-mono font-bold text-slate-100">SNIPPET COMPILED</div>
-                <div className="text-xs font-mono text-cyan-400">Punctuation muscle memory locked in!</div>
+                <div className="text-sm font-mono font-bold text-emerald-950">SNIPPET COMPILED</div>
+                <div className="text-xs font-mono text-emerald-700">Punctuation muscle memory locked in!</div>
               </div>
             </div>
             <button
               onClick={() => setSnippetIdx((prev) => prev + 1)}
-              className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs transition-colors"
+              className="btn-orange-pill px-4 py-2 rounded-lg font-mono font-bold text-xs"
             >
               NEXT CHALLENGE
             </button>

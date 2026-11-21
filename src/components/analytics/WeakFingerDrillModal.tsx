@@ -1,34 +1,23 @@
-import React, { useState, useRef } from 'react';
-import { TouchFinger } from '../../types/keyboard';
+import React, { useState, useEffect, useRef } from 'react';
 import { soundEngine } from '../../audio/SoundEngine';
-import { lofiRhythmEngine } from '../../audio/LofiRhythmEngine';
+import { ergonomicsService } from '../../services/ergonomicsService';
 import { X, Dumbbell, CheckCircle2, RotateCcw } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-
-const FINGER_DRILL_WORDS: Record<TouchFinger, string[]> = {
-  left_pinky: ['quack', 'jazz', 'plaza', 'zone', 'queen', 'quartz', 'zero', 'quick', 'apex', 'zeal', 'equal', 'quiz'],
-  left_ring: ['swift', 'sweet', 'wax', 'swim', 'sword', 'west', 'slow', 'wash', 'wise', 'sway', 'snow', 'waste'],
-  left_middle: ['deck', 'dice', 'edge', 'code', 'echo', 'cell', 'acid', 'cedar', 'decay', 'cider', 'dance', 'deduce'],
-  left_index: ['brave', 'frost', 'vivid', 'tramp', 'grape', 'burst', 'track', 'orbit', 'craft', 'tiger', 'favor', 'brand'],
-  thumb: ['space', 'galaxy', 'lunar', 'cosmic', 'orbit', 'stellar', 'void', 'vacuum', 'nebula', 'pulsar'],
-  right_index: ['honey', 'jump', 'night', 'month', 'young', 'human', 'union', 'magic', 'joint', 'heavy', 'haunt', 'humid'],
-  right_middle: ['kite', 'kill', 'silk', 'skin', 'milk', 'icon', 'kick', 'link', 'bike', 'king', 'sink', 'pink'],
-  right_ring: ['pool', 'loop', 'solo', 'look', 'moon', 'wool', 'poll', 'loom', 'door', 'poor', 'spoon', 'bloom'],
-  right_pinky: ['pop', 'plot', 'post', 'path', 'page', 'pour', 'pulp', 'pine', 'pipe', 'pump', 'palm', 'prism'],
-};
 
 interface WeakFingerDrillModalProps {
-  finger: TouchFinger;
+  finger: string;
   onClose: () => void;
 }
 
-export const WeakFingerDrillModal: React.FC<WeakFingerDrillModalProps> = ({ finger, onClose }) => {
-  const { themeConfig } = useTheme();
-  const drillWords = FINGER_DRILL_WORDS[finger] || FINGER_DRILL_WORDS.left_pinky;
-
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [typedChars, setTypedChars] = useState('');
-  const [isFinished, setIsFinished] = useState(false);
+export const WeakFingerDrillModal: React.FC<WeakFingerDrillModalProps> = ({
+  finger,
+  onClose,
+}) => {
+  const [drillWords, setDrillWords] = useState<string[]>(() =>
+    ergonomicsService.generateDrillWords(finger, 10)
+  );
+  const [currentIdx, setCurrentIdx] = useState<number>(0);
+  const [typedChars, setTypedChars] = useState<string>('');
+  const [isFinished, setIsFinished] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const currentWord = drillWords[currentIdx] || '';
@@ -45,30 +34,39 @@ export const WeakFingerDrillModal: React.FC<WeakFingerDrillModalProps> = ({ fing
       isBackspace: e.key === 'Backspace',
     });
 
-    if (lofiRhythmEngine.isEnabled() && e.key.length === 1) {
-      lofiRhythmEngine.triggerHarmonizedKeystroke(e.key);
-    }
-
     if (e.key === 'Backspace') {
-      if (typedChars.length > 0) setTypedChars((prev) => prev.slice(0, -1));
+      setTypedChars((prev) => prev.slice(0, -1));
       return;
     }
 
-    if (e.key === ' ') {
+    if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       if (typedChars === currentWord) {
-        const next = currentIdx + 1;
-        setTypedChars('');
-        setCurrentIdx(next);
-        if (next >= drillWords.length) {
+        if (currentIdx + 1 >= drillWords.length) {
           setIsFinished(true);
+        } else {
+          setCurrentIdx((prev) => prev + 1);
+          setTypedChars('');
         }
       }
       return;
     }
 
-    if (e.key.length === 1) {
-      setTypedChars((prev) => prev + e.key);
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const nextTyped = typedChars + e.key;
+      setTypedChars(nextTyped);
+
+      // Auto-advance if fully matches
+      if (nextTyped === currentWord) {
+        if (currentIdx + 1 >= drillWords.length) {
+          setIsFinished(true);
+        } else {
+          setTimeout(() => {
+            setCurrentIdx((prev) => prev + 1);
+            setTypedChars('');
+          }, 80);
+        }
+      }
     }
   };
 
@@ -84,27 +82,27 @@ export const WeakFingerDrillModal: React.FC<WeakFingerDrillModalProps> = ({ fing
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-      <div className="w-full max-w-lg p-6 rounded-2xl bg-slate-900 border border-cyan-500/40 shadow-2xl relative flex flex-col items-center">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="w-full max-w-lg p-6 rounded-2xl bg-white border border-neutral-200 shadow-2xl relative flex flex-col items-center text-neutral-900">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-200"
+          className="absolute top-4 right-4 p-1 rounded-lg text-neutral-400 hover:text-neutral-900"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <Dumbbell className="w-10 h-10 text-cyan-400 mb-2" />
-        <h3 className="text-xl font-mono font-black text-slate-100 tracking-wider">
+        <Dumbbell className="w-10 h-10 text-[#ff5500] mb-2" />
+        <h3 className="text-xl font-mono font-black text-neutral-900 tracking-wider">
           TARGETED WEAK-FINGER DRILL
         </h3>
-        <p className="text-xs font-mono text-cyan-400 mb-6 uppercase">
+        <p className="text-xs font-mono text-[#ff5500] mb-6 uppercase font-bold">
           Conditioning: {finger.replace('_', ' ')}
         </p>
 
         {!isFinished ? (
           <div
             onClick={() => inputRef.current?.focus()}
-            className="w-full p-8 rounded-xl bg-slate-950/70 border border-white/10 flex flex-col items-center cursor-text relative mb-6"
+            className="w-full p-8 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center cursor-text relative mb-6"
           >
             <input
               ref={inputRef}
@@ -117,20 +115,20 @@ export const WeakFingerDrillModal: React.FC<WeakFingerDrillModalProps> = ({ fing
               className="absolute opacity-0 pointer-events-none"
             />
 
-            <div className="text-xs font-mono text-slate-400 mb-3">
+            <div className="text-xs font-mono text-neutral-500 mb-3">
               Word {currentIdx + 1} of {drillWords.length}
             </div>
 
-            <div className="text-3xl font-mono font-bold tracking-widest text-cyan-300">
+            <div className="text-3xl font-mono font-bold tracking-widest text-[#ff5500]">
               {currentWord.split('').map((char, idx) => (
                 <span
                   key={idx}
                   className={
                     typedChars[idx] === undefined
-                      ? 'text-slate-500'
+                      ? 'text-neutral-400'
                       : typedChars[idx] === char
-                      ? 'text-cyan-300'
-                      : 'text-rose-500 bg-rose-950/40'
+                      ? 'text-[#ff5500] font-black'
+                      : 'text-rose-600 bg-rose-100 rounded'
                   }
                 >
                   {char}
@@ -138,29 +136,40 @@ export const WeakFingerDrillModal: React.FC<WeakFingerDrillModalProps> = ({ fing
               ))}
             </div>
 
-            <div className="text-xs font-mono text-slate-500 mt-4">
-              Press [SPACE] when word matches
+            <div className="mt-4 text-[11px] font-mono text-neutral-400">
+              Type word accurately to advance
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center py-6 animate-fadeIn">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mb-2" />
-            <div className="text-lg font-mono font-bold text-slate-100">DRILL COMPLETED!</div>
-            <p className="text-xs font-mono text-slate-400 mt-1 mb-6 text-center">
-              Your {finger.replace('_', ' ')} muscle memory has been reinforced.
+          <div className="flex flex-col items-center gap-3 p-6 rounded-xl bg-emerald-50 border border-emerald-200 text-center mb-6 w-full">
+            <CheckCircle2 className="w-12 h-12 text-emerald-600 animate-bounce" />
+            <h4 className="text-lg font-mono font-bold text-emerald-900">DRILL SESSION COMPLETED</h4>
+            <p className="text-xs font-mono text-emerald-700">
+              Muscle conditioning complete for {finger.replace('_', ' ')}.
             </p>
-            <button
-              onClick={() => {
-                setCurrentIdx(0);
-                setTypedChars('');
-                setIsFinished(false);
-              }}
-              className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5"
-            >
-              <RotateCcw className="w-4 h-4" /> REPEAT DRILL
-            </button>
           </div>
         )}
+
+        <div className="flex gap-3 w-full">
+          <button
+            onClick={() => {
+              setDrillWords(ergonomicsService.generateDrillWords(finger, 10));
+              setCurrentIdx(0);
+              setTypedChars('');
+              setIsFinished(false);
+              setTimeout(() => inputRef.current?.focus(), 50);
+            }}
+            className="flex-1 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 text-neutral-800 font-mono text-xs font-bold flex items-center justify-center gap-2"
+          >
+            <RotateCcw className="w-4 h-4" /> RESTART DRILL
+          </button>
+          <button
+            onClick={onClose}
+            className="btn-orange-pill flex-1 py-2.5 rounded-xl font-mono text-xs font-bold"
+          >
+            DONE
+          </button>
+        </div>
       </div>
     </div>
   );

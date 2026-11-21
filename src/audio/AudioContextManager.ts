@@ -116,6 +116,21 @@ class AudioContextManager {
   public getCurrentTime(): number {
     return this.getContext().currentTime;
   }
+
+  public playSpatialOpponentClick(): void {
+    const ctx = this.getContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(420 + Math.random() * 40, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.04);
+    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.connect(gain);
+    gain.connect(this.getOpponentInput());
+    osc.start();
+    osc.stop(ctx.currentTime + 0.045);
+  }
 }
 
 export const audioContextManager = AudioContextManager.getInstance();

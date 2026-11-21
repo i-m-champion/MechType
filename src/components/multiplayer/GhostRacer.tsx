@@ -26,21 +26,21 @@ export const GhostRacer: React.FC<GhostRacerProps> = ({
   const diffChars = activeCharIdx - ghostCharsTyped;
 
   return (
-    <div className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg bg-cyan-950/30 border border-cyan-500/20 text-xs font-mono my-2">
+    <div className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg bg-neutral-50 border border-neutral-200 text-xs font-mono my-2 shadow-xs text-neutral-800">
       <div className="flex items-center gap-2">
-        <Ghost className="w-4 h-4 text-cyan-400 animate-pulse" />
-        <span className="text-cyan-300 font-bold">
+        <Ghost className="w-4 h-4 text-[#ff5500] animate-pulse" />
+        <span className="text-neutral-900 font-bold">
           GHOST PACER ({targetWpm} WPM)
         </span>
       </div>
 
       <div className="flex items-center gap-4 text-[11px]">
-        <span className="text-slate-400">
+        <span className="text-neutral-500">
           Ghost: {ghostProgress}%
         </span>
         <span
           className={`font-bold ${
-            diffChars >= 0 ? 'text-emerald-400' : 'text-rose-400'
+            diffChars >= 0 ? 'text-emerald-600' : 'text-rose-600'
           }`}
         >
           {diffChars >= 0 ? `+${diffChars} ahead` : `${diffChars} behind`}

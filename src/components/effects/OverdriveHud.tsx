@@ -44,12 +44,12 @@ export const OverdriveHud: React.FC<OverdriveHudProps> = ({
       {streak >= 10 && (
         <div className="fixed top-20 right-6 z-40 pointer-events-none animate-bounce">
           <div
-            className={`px-4 py-2 rounded-xl backdrop-blur-md border shadow-2xl flex items-center gap-3 ${
+            className={`px-4 py-2 rounded-xl backdrop-blur-md border shadow-lg flex items-center gap-3 ${
               isOverdrive
-                ? 'bg-cyan-950/80 border-cyan-400 text-cyan-200 shadow-cyan-500/50'
+                ? 'bg-white/95 border-[#ff5500] text-[#ff5500] shadow-[#ff5500]/20'
                 : isCombustion
-                ? 'bg-rose-950/80 border-orange-500 text-orange-200 shadow-orange-500/50'
-                : 'bg-slate-900/80 border-amber-500/50 text-amber-200'
+                ? 'bg-white/95 border-orange-500 text-orange-600 shadow-orange-500/10'
+                : 'bg-white/95 border-amber-500 text-amber-700'
             }`}
           >
             {isOverdrive ? (

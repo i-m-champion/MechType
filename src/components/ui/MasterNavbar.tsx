@@ -67,17 +67,17 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
   ];
 
   return (
-    <header className="w-full border-b border-[#232838] sticky top-0 z-40 transition-colors backdrop-blur-md bg-[#08090d]/90 text-white">
+    <header className="w-full border-b border-neutral-200 sticky top-0 z-40 transition-colors backdrop-blur-md bg-white/95 text-neutral-900 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         {/* Left: ChainGPT Labs / Stols inspired Brand Monogram */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 p-1.5 px-2.5 rounded-lg border border-[#232838] bg-[#141824] shadow-sm">
+          <div className="flex items-center gap-2 p-1.5 px-2.5 rounded-lg border border-neutral-200 bg-white shadow-xs">
             {/* Robot / Terminal Face Monogram */}
             <div className="w-5 h-5 rounded bg-[#ff5500] text-white flex items-center justify-center font-bold text-[10px]">
               ::
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-extrabold tracking-wider text-[11px] font-display-chamfer text-white">
+              <span className="font-extrabold tracking-wider text-[11px] font-display-chamfer text-neutral-900">
                 MECHTYPE
               </span>
               <span className="text-[8px] tracking-widest text-[#ff5500] font-bold uppercase">
@@ -86,31 +86,31 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1.5 text-neutral-400 pl-2 border-l border-[#232838]">
+          <div className="hidden sm:flex items-center gap-1.5 text-neutral-500 pl-2 border-l border-neutral-200">
             <span>←</span>
-            <span className="hover:text-white cursor-pointer transition-colors">
+            <span className="hover:text-neutral-900 cursor-pointer transition-colors font-medium">
               Sensory Lab
             </span>
           </div>
         </div>
 
         {/* Center: Mode Tabs inspired by [ Portfolio ] Blog :: Our Ecosystem */}
-        <nav className="flex items-center gap-1.5 overflow-x-auto max-w-full py-1">
+        <nav className="flex items-center gap-1 overflow-x-auto max-w-full py-1">
           {modes.map((m) => {
             const isActive = activeMode === m.id;
             return (
               <button
                 key={m.id}
                 onClick={() => onSelectMode(m.id)}
-                className={`px-3 py-1.5 rounded transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-md transition-all whitespace-nowrap flex items-center gap-1.5 ${
                   isActive
-                    ? 'font-bold bg-[#1a202e] text-white border border-[#ff5500]/50 shadow-md'
-                    : 'text-neutral-400 hover:text-white hover:bg-[#141824]'
+                    ? 'font-bold bg-neutral-100 text-neutral-900 border border-[#ff5500]/70 shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 border border-transparent'
                 }`}
               >
-                {isActive && <span className="text-[#ff5500]">┌</span>}
+                {isActive && <span className="text-[#ff5500] font-bold">┌</span>}
                 <span>{m.label}</span>
-                {isActive && <span className="text-[#ff5500]">┘</span>}
+                {isActive && <span className="text-[#ff5500] font-bold">┘</span>}
               </button>
             );
           })}
@@ -119,23 +119,23 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
         {/* Right: Technical Controls & Orange "Apply Now" style Action */}
         <div className="flex items-center gap-2">
           {/* Switch Selector Pill */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#232838] bg-[#141824]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-neutral-200 bg-white shadow-xs">
             <KeyboardIcon className="w-3.5 h-3.5 text-[#ff5500]" />
             <select
               value={currentProfile}
               onChange={(e) => handleProfileChange(e.target.value as SoundProfileId)}
-              className="bg-transparent text-[11px] font-mono font-bold text-white focus:outline-none cursor-pointer max-w-[130px] truncate"
+              className="bg-transparent text-[11px] font-mono font-bold text-neutral-900 focus:outline-none cursor-pointer max-w-[130px] truncate"
             >
-              <optgroup label="Mechanical Switches" className="bg-[#141824] text-white">
+              <optgroup label="Mechanical Switches" className="bg-white text-neutral-900">
                 {SOUND_PROFILES.filter((p) => p.category === 'mechanical').map((p) => (
-                  <option key={p.id} value={p.id}>
+                  <option key={p.id} value={p.id} className="bg-white text-neutral-900">
                     {p.name}
                   </option>
                 ))}
               </optgroup>
-              <optgroup label="Bonus Soundpacks" className="bg-[#141824] text-white">
+              <optgroup label="Bonus Soundpacks" className="bg-white text-neutral-900">
                 {SOUND_PROFILES.filter((p) => p.category === 'bonus').map((p) => (
-                  <option key={p.id} value={p.id}>
+                  <option key={p.id} value={p.id} className="bg-white text-neutral-900">
                     {p.name}
                   </option>
                 ))}
@@ -146,21 +146,21 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* Lo-Fi Rhythm Harmonizer Sync */}
           <button
             onClick={handleToggleLofi}
-            className={`px-2.5 py-1 rounded border transition-colors flex items-center gap-1.5 text-[11px] ${
+            className={`px-2.5 py-1 rounded-md border transition-colors flex items-center gap-1.5 text-[11px] ${
               isLofiActive
-                ? 'bg-[#ff5500]/20 border-[#ff5500] text-[#ff5500] font-bold shadow-md shadow-[#ff5500]/20 animate-pulse'
-                : 'border-[#232838] bg-[#141824] text-neutral-400 hover:text-white'
+                ? 'bg-[#ff5500]/10 border-[#ff5500] text-[#ff5500] font-bold shadow-xs animate-pulse'
+                : 'border-neutral-200 bg-white text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 shadow-xs'
             }`}
             title="Toggle Ambient Lo-Fi Melodic Harmonizer"
           >
             <Music className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Lo-Fi</span>
+            <span className="hidden md:inline font-semibold">Lo-Fi</span>
           </button>
 
           {/* 10-Finger Heatmap */}
           <button
             onClick={onOpenHeatmap}
-            className="p-1.5 rounded border border-[#232838] bg-[#141824] hover:border-[#ff5500] text-neutral-300 hover:text-white transition-colors"
+            className="p-1.5 rounded-md border border-neutral-200 bg-white hover:border-[#ff5500] text-neutral-700 hover:text-neutral-900 transition-colors shadow-xs"
             title="10-Finger Ergonomic Heatmap"
           >
             <Activity className="w-3.5 h-3.5" />
@@ -169,7 +169,7 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* Typo Autopsy */}
           <button
             onClick={onOpenAutopsy}
-            className="p-1.5 rounded border border-[#232838] bg-[#141824] hover:border-[#ff5500] text-neutral-300 hover:text-white transition-colors"
+            className="p-1.5 rounded-md border border-neutral-200 bg-white hover:border-[#ff5500] text-neutral-700 hover:text-neutral-900 transition-colors shadow-xs"
             title="Slow-Mo Typo Autopsy"
           >
             <Search className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
           {/* High-Impact Orange Pill Button (Inspired by APPLY NOW / APPLY FOR INCUBATION) */}
           <button
             onClick={onOpenSettings}
-            className="btn-orange-pill px-3 py-1.5 rounded font-mono font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-[#ff5500]/25"
+            className="btn-orange-pill px-3 py-1.5 rounded-md font-mono font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-[#ff5500]/25"
           >
             <Sliders className="w-3.5 h-3.5" />
             <span>CALIBRATE</span>

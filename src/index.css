@@ -4,15 +4,17 @@
 
 @layer base {
   :root {
-    --color-bg: #08090d;
-    --color-surface: #0f1219;
+    --color-bg: #ffffff;
+    --color-surface: #ffffff;
+    --color-panel: #fafafa;
+    --color-border: #e5e7eb;
     --color-accent: #ff5500;
-    --color-text: #ffffff;
+    --color-text: #111827;
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-text, #ffffff);
+    background-color: #ffffff;
+    color: #111827;
     font-family: 'Space Grotesk', system-ui, sans-serif;
     overflow-x: hidden;
   }
@@ -24,22 +26,22 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #08090d;
+  background: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
-  background: #232838;
-  border-radius: 2px;
+  background: #e5e7eb;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #ff5500;
 }
 
-/* Architectural Dark Engineering Grid */
+/* Pristine All-White Architectural Grid */
 .architectural-grid {
-  background-color: #08090d;
+  background-color: #ffffff;
   background-image: 
-    linear-gradient(to right, rgba(35, 40, 56, 0.5) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(35, 40, 56, 0.5) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -75,12 +77,12 @@
   pointer-events: none;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.25) 50%
+    rgba(0, 0, 0, 0.06) 50%
   ), linear-gradient(
     90deg,
-    rgba(255, 0, 0, 0.03),
-    rgba(0, 255, 0, 0.02),
-    rgba(0, 0, 255, 0.03)
+    rgba(255, 0, 0, 0.02),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.02)
   );
   background-size: 100% 3px, 6px 100%;
 }
@@ -93,17 +95,17 @@
 /* Overdrive Edge Chromatic Aberration */
 .chromatic-aberration {
   box-shadow: 
-    inset 0 0 40px rgba(255, 85, 0, 0.35),
-    inset 0 0 80px rgba(255, 38, 38, 0.25);
+    inset 0 0 40px rgba(255, 85, 0, 0.25),
+    inset 0 0 80px rgba(255, 38, 38, 0.15);
   animation: chromaticPulse 0.4s infinite alternate;
 }
 
 @keyframes chromaticPulse {
   0% {
-    filter: drop-shadow(-2px 0 0 rgba(255, 85, 0, 0.8)) drop-shadow(2px 0 0 rgba(0, 240, 255, 0.8));
+    filter: drop-shadow(-2px 0 0 rgba(255, 85, 0, 0.8)) drop-shadow(2px 0 0 rgba(0, 180, 255, 0.8));
   }
   100% {
-    filter: drop-shadow(-4px 0 0 rgba(255, 85, 0, 0.9)) drop-shadow(4px 0 0 rgba(0, 240, 255, 0.9));
+    filter: drop-shadow(-4px 0 0 rgba(255, 85, 0, 0.9)) drop-shadow(4px 0 0 rgba(0, 180, 255, 0.9));
   }
 }
 
@@ -122,5 +124,5 @@
 }
 .btn-orange-pill:hover {
   background-color: #ff3c00;
-  box-shadow: 0 4px 18px rgba(255, 85, 0, 0.45);
+  box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);
 }

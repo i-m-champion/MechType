@@ -100,12 +100,7 @@ function MechTypeApp() {
   const weakestFinger = ergonomicsService.getWeakestFinger();
 
   return (
-    <div
-      className="min-h-screen flex flex-col justify-between relative architectural-grid selection:bg-[#ff5500]/30 selection:text-white font-sans text-white"
-      style={{
-        backgroundColor: '#08090d',
-      }}
-    >
+    <div className="min-h-screen flex flex-col justify-between relative architectural-grid selection:bg-[#ff5500]/20 selection:text-[#ff5500] font-sans bg-white text-neutral-900">
       {/* Dynamic Overdrive HUD & Particle Layer */}
       <ParticleCanvas tier={currentTier} caretPos={caretPos} triggerKey={particleTrigger} />
       <OverdriveHud wpm={liveWpm} streak={streak} tier={currentTier} screenShake={liveWpm >= 40} />
@@ -122,85 +117,85 @@ function MechTypeApp() {
       {/* Main Architectural Blueprint Canvas */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 flex flex-col gap-6 relative z-10">
         {/* =========================================================================
-            HERO MASTHEAD: SEGMENTED BRUTALIST DISPLAY (White Text on Dark Grid)
+            HERO MASTHEAD: SEGMENTED BRUTALIST DISPLAY (Pure White Canvas)
             ========================================================================= */}
-        <section className="border border-[#232838] bg-[#0f1219] rounded-2xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+        <section className="border border-neutral-200/90 bg-white rounded-2xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
           {/* Top Registration Bar */}
-          <div className="flex items-center justify-between border-b border-[#232838] pb-3 mb-6 text-[11px] font-mono text-neutral-400 uppercase tracking-widest">
+          <div className="flex items-center justify-between border-b border-neutral-200 pb-3 mb-6 text-[11px] font-mono text-neutral-500 uppercase tracking-widest">
             <div className="flex items-center gap-2">
               <span className="text-[#ff5500] font-bold">✳</span>
-              <span className="text-white font-bold">SYNTHETIC + ACOUSTIC</span>
-              <span className="text-neutral-500">/</span>
-              <span>EXPERIMENTAL ENGINE</span>
+              <span className="text-neutral-900 font-bold">SYNTHETIC + ACOUSTIC</span>
+              <span className="text-neutral-400">/</span>
+              <span>EXPERIMENTAL SENSORY ENGINE</span>
             </div>
             <div className="hidden sm:flex items-center gap-3">
-              <span className="text-neutral-400">DESIGN 2024</span>
-              <span className="text-neutral-600">//</span>
+              <span className="text-neutral-500">DESIGN 2024</span>
+              <span className="text-neutral-300">//</span>
               <span className="text-[#ff5500] font-bold">2001 A SPACE ODYSSEY</span>
               <span className="text-[#ff5500]">◎</span>
             </div>
           </div>
 
-          {/* Huge Segmented Display Title: MECH_TYPE (Stark White) */}
+          {/* Huge Segmented Display Title: MECH_TYPE */}
           <div className="relative py-2 flex flex-col items-center sm:items-start">
-            <h1 className="font-display-chamfer text-6xl sm:text-8xl md:text-9xl font-black text-white tracking-tighter leading-none select-none drop-shadow-md">
+            <h1 className="font-display-chamfer text-6xl sm:text-8xl md:text-9xl font-black text-neutral-900 tracking-tighter leading-none select-none">
               MECH_TYPE
             </h1>
 
-            <div className="flex flex-wrap items-center justify-between w-full mt-4 gap-4 text-xs font-mono text-neutral-300">
-              <p className="max-w-xl text-sm leading-relaxed text-neutral-300">
+            <div className="flex flex-wrap items-center justify-between w-full mt-4 gap-4 text-xs font-mono text-neutral-600">
+              <p className="max-w-xl text-sm leading-relaxed text-neutral-600">
                 The reinvention of human cognition & muscle memory through tactile mechanical acoustic feedback.
                 <span className="text-[#ff5500] font-bold ml-1.5">/a sensory experiment/</span>
               </p>
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider font-bold">
                 <span className="w-2 h-2 rounded-full bg-[#ff5500] animate-pulse" />
-                <span className="text-neutral-200">HUMAN / EXPRESSION / INTEGRATION</span>
+                <span className="text-neutral-800">HUMAN / EXPRESSION / INTEGRATION</span>
               </div>
             </div>
           </div>
 
           {/* =========================================================================
-              MODULAR 3-COLUMN HERO GRID (Dark Architectural Wireframe)
+              MODULAR 3-COLUMN HERO GRID (Pristine White Architectural)
               ========================================================================= */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-0 border border-[#232838] rounded-xl mt-8 overflow-hidden bg-[#141824]">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-0 border border-neutral-200 rounded-xl mt-8 overflow-hidden bg-neutral-50">
             {/* Col 1: Meet Our Sensory Engine & Mode Count */}
-            <div className="md:col-span-3 p-5 border-b md:border-b-0 md:border-r border-[#232838] flex flex-col justify-between">
+            <div className="md:col-span-3 p-5 border-b md:border-b-0 md:border-r border-neutral-200 flex flex-col justify-between bg-white">
               <div>
-                <div className="text-[11px] font-mono text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
+                <div className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-[#ff5500]" />
-                  <span className="text-white font-bold">Meet our sensory engine</span>
+                  <span className="text-neutral-900 font-bold">Meet our sensory engine</span>
                 </div>
               </div>
               <div className="mt-6">
-                <div className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest">
+                <div className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest font-bold">
                   Game Modes Active
                 </div>
-                <div className="text-5xl font-display-chamfer font-black text-white tracking-tight">
+                <div className="text-5xl font-display-chamfer font-black text-neutral-900 tracking-tight">
                   07
                 </div>
               </div>
             </div>
 
             {/* Col 2: Isometric Wireframe Graphic & Bracket */}
-            <div className="md:col-span-2 p-5 border-b md:border-b-0 md:border-r border-[#232838] flex flex-col items-center justify-center relative bg-[#0f1219]">
+            <div className="md:col-span-2 p-5 border-b md:border-b-0 md:border-r border-neutral-200 flex flex-col items-center justify-center relative bg-neutral-50/60">
               <span className="absolute top-2 left-2 text-[10px] font-mono text-[#ff5500]">┌</span>
               <span className="absolute bottom-2 right-2 text-[10px] font-mono text-[#ff5500]">┘</span>
-              <div className="w-16 h-16 rounded-xl border border-[#2e3447] bg-[#141824] flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 rounded-xl border border-neutral-200 bg-white flex items-center justify-center shadow-sm">
                 <Disc className="w-8 h-8 text-[#ff5500] animate-spin" style={{ animationDuration: '8s' }} />
               </div>
-              <span className="text-[9px] font-mono text-neutral-400 mt-2 uppercase tracking-widest">
+              <span className="text-[9px] font-mono text-neutral-500 mt-2 uppercase tracking-widest font-bold">
                 ZERO MP3 LATENCY
               </span>
             </div>
 
             {/* Col 3: Featured Active Switch Card */}
-            <div className="md:col-span-7 p-5 bg-[#0f1219] flex flex-col justify-between">
+            <div className="md:col-span-7 p-5 bg-white flex flex-col justify-between">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-1.5 py-0.5 rounded bg-[#ff5500] text-white text-[9px] font-mono font-bold uppercase">
                     ACTIVE PROFILE
                   </span>
-                  <span className="text-[10px] font-mono text-neutral-400 uppercase">
+                  <span className="text-[10px] font-mono text-neutral-500 uppercase font-semibold">
                     {currentSoundMeta.category}
                   </span>
                 </div>
@@ -213,28 +208,28 @@ function MechTypeApp() {
               </div>
 
               <div className="my-3">
-                <div className="text-xl font-display-chamfer font-black text-white flex items-center gap-2">
+                <div className="text-xl font-display-chamfer font-black text-neutral-900 flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: currentSoundMeta.accentColor }} />
                   {currentSoundMeta.name}
                 </div>
-                <p className="text-xs font-mono text-neutral-300 mt-1">
+                <p className="text-xs font-mono text-neutral-600 mt-1">
                   {currentSoundMeta.description}
                 </p>
               </div>
 
               {/* Metric bar */}
-              <div className="grid grid-cols-4 border-t border-[#232838] pt-3 text-[11px] font-mono">
+              <div className="grid grid-cols-4 border-t border-neutral-100 pt-3 text-[11px] font-mono">
                 <div>
                   <div className="text-neutral-400 text-[10px]">Tactile Feel</div>
-                  <div className="font-bold text-white truncate">{currentSoundMeta.tactileFeel}</div>
+                  <div className="font-bold text-neutral-900 truncate">{currentSoundMeta.tactileFeel}</div>
                 </div>
                 <div>
                   <div className="text-neutral-400 text-[10px]">Pitch Jitter</div>
-                  <div className="font-bold text-emerald-400">±3% Detuned</div>
+                  <div className="font-bold text-emerald-600">±3% Detuned</div>
                 </div>
                 <div>
                   <div className="text-neutral-400 text-[10px]">Stabilizers</div>
-                  <div className="font-bold text-white">Resonant Wire</div>
+                  <div className="font-bold text-neutral-900">Resonant Wire</div>
                 </div>
                 <div>
                   <div className="text-neutral-400 text-[10px]">Dual-Action</div>
@@ -246,69 +241,69 @@ function MechTypeApp() {
         </section>
 
         {/* =========================================================================
-            DATA TELEMETRY GRID CARDS (Dark Architectural Wireframe)
+            DATA TELEMETRY GRID CARDS (Pristine White Cards)
             ========================================================================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Speedometer */}
-          <div className="border border-[#232838] bg-[#0f1219] rounded-xl p-4 flex flex-col justify-between shadow-xl">
-            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400 uppercase pb-2 border-b border-[#232838]">
-              <span className="text-white font-bold">Speedometer</span>
-              <span className="text-neutral-400">LIVE CADENCE</span>
+          <div className="border border-neutral-200 bg-white rounded-xl p-4 flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 uppercase pb-2 border-b border-neutral-100">
+              <span className="text-neutral-900 font-bold">Speedometer</span>
+              <span>LIVE CADENCE</span>
             </div>
             <div className="py-2 flex justify-center">
               <RadialSpeedometer wpm={liveWpm} kps={liveKps} />
             </div>
-            <div className="grid grid-cols-2 pt-2 border-t border-[#232838] text-[11px] font-mono">
+            <div className="grid grid-cols-2 pt-2 border-t border-neutral-100 text-[11px] font-mono">
               <div>
                 <span className="text-neutral-400 text-[10px]">Peak Record</span>
-                <div className="font-bold text-white">{historyService.getBestWpm()} WPM</div>
+                <div className="font-bold text-neutral-900">{historyService.getBestWpm()} WPM</div>
               </div>
               <div>
                 <span className="text-neutral-400 text-[10px]">Avg Speed</span>
-                <div className="font-bold text-white">{historyService.getAvgWpm()} WPM</div>
+                <div className="font-bold text-neutral-900">{historyService.getAvgWpm()} WPM</div>
               </div>
             </div>
           </div>
 
           {/* Card 2: Overdrive Matrix */}
-          <div className="border border-[#232838] bg-[#0f1219] rounded-xl p-4 flex flex-col justify-between shadow-xl">
-            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400 uppercase pb-2 border-b border-[#232838]">
-              <span className="text-white font-bold">Overdrive State</span>
+          <div className="border border-neutral-200 bg-white rounded-xl p-4 flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 uppercase pb-2 border-b border-neutral-100">
+              <span className="text-neutral-900 font-bold">Overdrive State</span>
               <span className="text-[#ff5500] font-bold">TIER // 04</span>
             </div>
             <div className="py-6 flex flex-col items-center justify-center">
-              <div className="text-3xl font-display-chamfer font-black text-white uppercase tracking-tight flex items-center gap-2">
+              <div className="text-3xl font-display-chamfer font-black text-neutral-900 uppercase tracking-tight flex items-center gap-2">
                 {currentTier === 'overdrive' ? <Zap className="w-6 h-6 text-[#ff5500]" /> : <Flame className="w-6 h-6 text-orange-500" />}
                 {currentTier}
               </div>
-              <div className="text-xs font-mono text-neutral-400 mt-1">
+              <div className="text-xs font-mono text-neutral-500 mt-1">
                 Streak: <strong className="text-[#ff5500] font-bold">{streak}x</strong> (Multiplier: {comboMultiplier}x)
               </div>
             </div>
-            <div className="grid grid-cols-2 pt-2 border-t border-[#232838] text-[11px] font-mono">
+            <div className="grid grid-cols-2 pt-2 border-t border-neutral-100 text-[11px] font-mono">
               <div>
                 <span className="text-neutral-400 text-[10px]">Sparks Trigger</span>
-                <div className="font-bold text-white">&gt; 40 WPM</div>
+                <div className="font-bold text-neutral-900">&gt; 40 WPM</div>
               </div>
               <div>
                 <span className="text-neutral-400 text-[10px]">Combustion</span>
-                <div className="font-bold text-white">&gt; 70 WPM</div>
+                <div className="font-bold text-neutral-900">&gt; 70 WPM</div>
               </div>
             </div>
           </div>
 
           {/* Card 3: Ergonomic Coaching */}
-          <div className="border border-[#232838] bg-[#0f1219] rounded-xl p-4 flex flex-col justify-between shadow-xl">
-            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400 uppercase pb-2 border-b border-[#232838]">
-              <span className="text-white font-bold">Finger Latency</span>
-              <span className="text-emerald-400">10-FINGER</span>
+          <div className="border border-neutral-200 bg-white rounded-xl p-4 flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 uppercase pb-2 border-b border-neutral-100">
+              <span className="text-neutral-900 font-bold">Finger Latency</span>
+              <span className="text-emerald-600 font-bold">10-FINGER</span>
             </div>
             <div className="py-4">
-              <div className="text-xs font-mono text-neutral-300">
+              <div className="text-xs font-mono text-neutral-700">
                 {weakestFinger ? (
                   <>
                     Diagnostic: <span className="text-[#ff5500] font-bold">{weakestFinger.name}</span> has{' '}
-                    <strong className="text-white">{weakestFinger.avgLatencyMs}ms</strong> delay & {weakestFinger.errorRate}% error rate.
+                    <strong className="text-neutral-900">{weakestFinger.avgLatencyMs}ms</strong> delay & {weakestFinger.errorRate}% error rate.
                   </>
                 ) : (
                   'Touch typing balance is optimal across all fingers.'
@@ -317,20 +312,20 @@ function MechTypeApp() {
               {weakestFinger && (
                 <button
                   onClick={() => setActiveDrillFinger(weakestFinger.finger as TouchFinger)}
-                  className="mt-3 px-2.5 py-1 rounded bg-[#1c2230] hover:bg-[#252d40] text-[11px] font-mono font-bold text-[#ff5500] transition-colors"
+                  className="mt-3 px-2.5 py-1 rounded bg-neutral-100 hover:bg-neutral-200 text-[11px] font-mono font-bold text-[#ff5500] transition-colors"
                 >
                   Start Weak-Finger Drill →
                 </button>
               )}
             </div>
-            <div className="grid grid-cols-2 pt-2 border-t border-[#232838] text-[11px] font-mono">
+            <div className="grid grid-cols-2 pt-2 border-t border-neutral-100 text-[11px] font-mono">
               <div>
                 <span className="text-neutral-400 text-[10px]">Avg Accuracy</span>
-                <div className="font-bold text-emerald-400">{historyService.getAvgAccuracy()}%</div>
+                <div className="font-bold text-emerald-600">{historyService.getAvgAccuracy()}%</div>
               </div>
               <div>
                 <span className="text-neutral-400 text-[10px]">Autopsy Logs</span>
-                <div className="font-bold text-white cursor-pointer hover:underline" onClick={() => setIsAutopsyOpen(true)}>
+                <div className="font-bold text-neutral-900 cursor-pointer hover:underline" onClick={() => setIsAutopsyOpen(true)}>
                   Inspect 3s Slow-Mo
                 </div>
               </div>
@@ -338,38 +333,38 @@ function MechTypeApp() {
           </div>
 
           {/* Card 4: Historical Records & Export */}
-          <div className="border border-[#232838] bg-[#0f1219] rounded-xl p-4 flex flex-col justify-between shadow-xl">
-            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400 uppercase pb-2 border-b border-[#232838]">
-              <span className="text-white font-bold">Analytics Vault</span>
-              <span className="text-neutral-400">LOCALSTORAGE</span>
+          <div className="border border-neutral-200 bg-white rounded-xl p-4 flex flex-col justify-between shadow-sm">
+            <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 uppercase pb-2 border-b border-neutral-100">
+              <span className="text-neutral-900 font-bold">Analytics Vault</span>
+              <span>LOCALSTORAGE</span>
             </div>
             <div className="py-4 flex flex-col gap-2">
-              <div className="text-xs font-mono text-neutral-300">
+              <div className="text-xs font-mono text-neutral-600">
                 All benchmark speeds, keystroke timestamps, and switch profiles are saved permanently in browser storage.
               </div>
               <div className="flex gap-2 mt-1">
                 <button
                   onClick={() => setIsHistoryOpen(true)}
-                  className="px-2.5 py-1 rounded bg-white text-black text-[11px] font-mono font-bold hover:bg-neutral-200 transition-colors"
+                  className="px-2.5 py-1 rounded bg-neutral-100 border border-neutral-300 text-neutral-900 text-[11px] font-mono font-bold hover:bg-neutral-200 transition-colors"
                 >
                   View Logbook
                 </button>
                 <button
                   onClick={() => historyService.exportJson()}
-                  className="px-2.5 py-1 rounded border border-[#2e3447] text-[11px] font-mono text-neutral-300 hover:text-white"
+                  className="px-2.5 py-1 rounded border border-neutral-300 text-[11px] font-mono text-neutral-700 hover:text-black"
                 >
                   Export JSON
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 pt-2 border-t border-[#232838] text-[11px] font-mono">
+            <div className="grid grid-cols-2 pt-2 border-t border-neutral-100 text-[11px] font-mono">
               <div>
                 <span className="text-neutral-400 text-[10px]">Sessions Logged</span>
-                <div className="font-bold text-white">{historyService.getRecords().length} Tests</div>
+                <div className="font-bold text-neutral-900">{historyService.getRecords().length} Tests</div>
               </div>
               <div>
                 <span className="text-neutral-400 text-[10px]">Security</span>
-                <div className="font-bold text-emerald-400 flex items-center gap-1">
+                <div className="font-bold text-emerald-600 flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" /> 100% Offline
                 </div>
               </div>
@@ -378,19 +373,19 @@ function MechTypeApp() {
         </div>
 
         {/* =========================================================================
-            MAIN INTERACTIVE GAME MODE VIEWPORT (Speed Sprint, Code Sprint, Boss, etc.)
+            MAIN INTERACTIVE GAME MODE VIEWPORT (Pristine White Testing Bay)
             ========================================================================= */}
-        <section className="border border-[#232838] bg-[#0f1219] rounded-2xl p-6 sm:p-8 shadow-2xl relative corner-crosshair">
-          <div className="flex items-center justify-between border-b border-[#232838] pb-3 mb-6 text-xs font-mono text-neutral-400 uppercase">
+        <section className="border border-neutral-200/90 bg-white rounded-2xl p-6 sm:p-8 shadow-sm relative corner-crosshair">
+          <div className="flex items-center justify-between border-b border-neutral-200 pb-3 mb-6 text-xs font-mono text-neutral-500 uppercase">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#ff5500]" />
-              <span className="font-bold text-white">
+              <span className="font-bold text-neutral-900">
                 ACTIVE LAB PROTOCOL: {activeMode.replace('_', ' ').toUpperCase()}
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-neutral-400">TARGET: 100% MUSCLE MEMORY</span>
-              <span className="text-neutral-600">//</span>
+              <span className="text-neutral-500">TARGET: 100% MUSCLE MEMORY</span>
+              <span className="text-neutral-300">//</span>
               <span className="text-[#ff5500] font-bold">BENCHMARK CERTIFIED</span>
             </div>
           </div>
@@ -426,17 +421,17 @@ function MechTypeApp() {
         {/* =========================================================================
             3D ISOMETRIC KEYBOARD VISUALIZER
             ========================================================================= */}
-        <section className="border border-[#232838] bg-[#0f1219] rounded-2xl p-6 shadow-2xl relative corner-crosshair">
-          <div className="flex items-center justify-between border-b border-[#232838] pb-3 mb-4 text-xs font-mono text-neutral-400 uppercase">
+        <section className="border border-neutral-200/90 bg-white rounded-2xl p-6 shadow-sm relative corner-crosshair">
+          <div className="flex items-center justify-between border-b border-neutral-200 pb-3 mb-4 text-xs font-mono text-neutral-500 uppercase">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-white">
+              <span className="font-bold text-neutral-900">
                 ISO-SPRING PHYSICAL KEYBOARD VISUALIZER
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1c2230] text-[#ff5500] font-bold">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-100 text-[#ff5500] font-bold">
                 SPRING PHYSICS ACTIVE
               </span>
             </div>
-            <div className="text-[11px] text-neutral-500 font-mono">
+            <div className="text-[11px] text-neutral-400 font-mono">
               [ R01_TOP • R02_QWE • R03_HOM • R04_BOT • R05_SPC ]
             </div>
           </div>
@@ -445,14 +440,14 @@ function MechTypeApp() {
         </section>
 
         {/* =========================================================================
-            BOTTOM CALL-TO-ACTION BAR (ChainGPT Labs inspired bottom bar)
+            BOTTOM CALL-TO-ACTION BAR
             ========================================================================= */}
-        <section className="border border-[#232838] bg-[#0f1219] rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4 text-xs font-mono shadow-xl">
+        <section className="border border-neutral-200 bg-white rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4 text-xs font-mono shadow-sm">
           <div className="flex items-center gap-3">
-            <span className="font-bold text-white">
+            <span className="font-bold text-neutral-900">
               ▶ READY TO TEST YOUR REFLEXES?
             </span>
-            <span className="px-2 py-1 rounded bg-[#1c2230] text-neutral-300 font-bold uppercase">
+            <span className="px-2 py-1 rounded bg-neutral-100 text-neutral-700 font-bold uppercase">
               {activeMode.replace('_', ' ')}
             </span>
           </div>
@@ -460,13 +455,13 @@ function MechTypeApp() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setActiveMode('mechanical_duel')}
-              className="btn-orange-pill px-4 py-2.5 rounded font-mono font-bold text-xs uppercase tracking-wider"
+              className="btn-orange-pill px-4 py-2.5 rounded font-mono font-bold text-xs uppercase tracking-wider shadow-sm"
             >
               START 1v1 DUEL
             </button>
             <button
               onClick={() => setIsHeatmapOpen(true)}
-              className="px-4 py-2.5 rounded border border-[#2e3447] bg-[#141824] hover:bg-[#1a1f2e] text-white font-mono font-bold text-xs uppercase"
+              className="px-4 py-2.5 rounded border border-neutral-300 bg-neutral-50 hover:bg-neutral-100 text-neutral-800 font-mono font-bold text-xs uppercase transition-colors"
             >
               ANALYZE WEAK FINGERS
             </button>
@@ -481,11 +476,11 @@ function MechTypeApp() {
       />
 
       {isHeatmapOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="w-full max-w-4xl relative">
             <button
               onClick={() => setIsHeatmapOpen(false)}
-              className="absolute top-4 right-4 z-10 px-3 py-1 rounded-lg bg-neutral-800 text-xs font-mono text-white"
+              className="absolute top-4 right-4 z-10 px-3 py-1 rounded-lg bg-white border border-neutral-200 text-xs font-mono text-neutral-700 hover:text-black shadow-xs font-bold"
             >
               CLOSE [X]
             </button>

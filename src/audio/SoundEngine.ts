@@ -54,6 +54,41 @@ export class SoundEngine {
     this.dualActionEnabled = enabled;
   }
 
+  public isPitchJitterEnabled(): boolean {
+    return this.jitterEnabled;
+  }
+
+  public isStabilizerPhysicsEnabled(): boolean {
+    return this.stabilizersEnabled;
+  }
+
+  public isDualActionEnabled(): boolean {
+    return this.dualActionEnabled;
+  }
+
+  public togglePitchJitter(): boolean {
+    this.jitterEnabled = !this.jitterEnabled;
+    return this.jitterEnabled;
+  }
+
+  public toggleStabilizerPhysics(): boolean {
+    this.stabilizersEnabled = !this.stabilizersEnabled;
+    return this.stabilizersEnabled;
+  }
+
+  public toggleDualAction(): boolean {
+    this.dualActionEnabled = !this.dualActionEnabled;
+    return this.dualActionEnabled;
+  }
+
+  public getMasterVolume(): number {
+    return audioContextManager.getVolume();
+  }
+
+  public setMasterVolume(val: number): void {
+    audioContextManager.setVolume(val);
+  }
+
   /**
    * Primary Keystroke Trigger
    */

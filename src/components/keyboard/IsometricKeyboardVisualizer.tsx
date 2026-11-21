@@ -233,10 +233,10 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
       }}
     >
       {/* Visualizer Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 mb-2 border-b border-white/5 px-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 mb-2 border-b border-neutral-200 px-2">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full animate-ping" style={{ backgroundColor: themeConfig.accent }} />
-          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-neutral-500">
             60% ISO-SPRING VISUALIZER
           </span>
         </div>
@@ -244,16 +244,16 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
         {/* Controls: RGB Waves & Themes */}
         <div className="flex items-center gap-3">
           {/* RGB Mode Selector */}
-          <div className="flex items-center gap-1 bg-black/30 p-1 rounded-lg border border-white/5">
-            <span className="text-[10px] font-mono text-slate-400 px-1">RGB:</span>
+          <div className="flex items-center gap-1 bg-neutral-100 p-1 rounded-lg border border-neutral-200">
+            <span className="text-[10px] font-mono text-neutral-500 px-1 font-bold">RGB:</span>
             {(['rainbow', 'neon', 'matrix', 'starlight', 'off'] as RgbMode[]).map((mode) => (
               <button
                 key={mode}
                 onClick={() => setRgbMode(mode)}
                 className={`px-1.5 py-0.5 text-[10px] font-mono uppercase rounded transition-colors ${
                   rgbMode === mode
-                    ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#ff5500] text-white font-bold shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-900'
                 }`}
               >
                 {mode}
@@ -262,18 +262,18 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
           </div>
 
           {/* Keycap Theme Switcher */}
-          <div className="flex items-center gap-1 bg-black/5 dark:bg-black/30 p-1 rounded-lg border border-neutral-300 dark:border-white/5">
-            <span className="text-[10px] font-mono text-neutral-500 px-1">Theme:</span>
+          <div className="flex items-center gap-1 bg-neutral-100 p-1 rounded-lg border border-neutral-200">
+            <span className="text-[10px] font-mono text-neutral-500 px-1 font-bold">Theme:</span>
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value as any)}
-              className="bg-transparent text-[11px] font-mono font-bold text-[#ff5500] dark:text-cyan-400 focus:outline-none cursor-pointer"
+              className="bg-transparent text-[11px] font-mono font-bold text-neutral-900 focus:outline-none cursor-pointer"
             >
-              <option value="industrial" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Industrial Wireframe</option>
-              <option value="cyberpunk" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Cyberpunk Neon</option>
-              <option value="retro1984" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Retro 1984 Beige</option>
-              <option value="nordic" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Nordic Minimal Slate</option>
-              <option value="crt" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">CRT Phosphor Green</option>
+              <option value="industrial" className="bg-white text-neutral-900">Pristine White Architectural</option>
+              <option value="cyberpunk" className="bg-white text-neutral-900">Cyberpunk Neon</option>
+              <option value="retro1984" className="bg-white text-neutral-900">Retro 1984 Beige</option>
+              <option value="nordic" className="bg-white text-neutral-900">Nordic Minimal Slate</option>
+              <option value="crt" className="bg-white text-neutral-900">CRT Phosphor Green</option>
             </select>
           </div>
         </div>

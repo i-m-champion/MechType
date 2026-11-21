@@ -264,10 +264,10 @@ export const BossBattleMode: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Boss Selection & Mode Header */}
-      <div className="flex flex-wrap items-center justify-between w-full mb-4 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 backdrop-blur-md gap-3">
+      <div className="flex flex-wrap items-center justify-between w-full mb-4 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs gap-3">
         <div className="flex items-center gap-2">
           <Swords className="w-5 h-5 text-rose-500" />
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-800">
             BOSS BATTLE RPG //
           </span>
           {BOSSES.map((b, idx) => (
@@ -279,8 +279,8 @@ export const BossBattleMode: React.FC = () => {
               }}
               className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
                 bossIndex === idx
-                  ? 'bg-rose-500/20 text-rose-300 font-bold border border-rose-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-rose-50 text-rose-700 font-bold border border-rose-300 shadow-xs'
+                  : 'text-neutral-500 hover:text-neutral-900'
               }`}
             >
               {b.name}
@@ -291,12 +291,12 @@ export const BossBattleMode: React.FC = () => {
         {/* Powerups Indicators */}
         <div className="flex items-center gap-3">
           {doubleDamageActive && (
-            <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-mono font-bold flex items-center gap-1 animate-pulse">
+            <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-300 text-[11px] font-mono font-bold flex items-center gap-1 animate-pulse">
               <Zap className="w-3.5 h-3.5" /> 2X DMG
             </span>
           )}
           {bulletTimeActive && (
-            <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[11px] font-mono font-bold flex items-center gap-1 animate-pulse">
+            <span className="px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-300 text-[11px] font-mono font-bold flex items-center gap-1 animate-pulse">
               <Clock className="w-3.5 h-3.5" /> BULLET TIME
             </span>
           )}
@@ -304,7 +304,7 @@ export const BossBattleMode: React.FC = () => {
       </div>
 
       {/* Boss Arena Stage */}
-      <div className="w-full p-6 rounded-2xl bg-gradient-to-b from-slate-950 to-slate-900 border border-rose-500/30 relative overflow-hidden shadow-2xl flex flex-col items-center min-h-[360px]">
+      <div className="w-full p-6 rounded-2xl bg-white border border-neutral-200/90 relative overflow-hidden shadow-sm flex flex-col items-center min-h-[360px] text-neutral-900">
         {/* Floating Damage Numbers */}
         {damageNumbers.map((dmg) => (
           <div
@@ -324,20 +324,20 @@ export const BossBattleMode: React.FC = () => {
         {/* Boss HP Gauge */}
         <div className="w-full max-w-lg mb-4">
           <div className="flex items-center justify-between text-xs font-mono mb-1.5">
-            <span className="font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="font-bold text-rose-600 uppercase tracking-wider flex items-center gap-1.5">
               <Skull className="w-4 h-4" /> {currentBoss.name}
             </span>
-            <span className="text-slate-400">
+            <span className="text-neutral-500">
               {bossHp} / {currentBoss.maxHp} HP
             </span>
           </div>
-          <div className="w-full h-4 bg-slate-950 rounded-full border border-white/10 overflow-hidden p-0.5">
+          <div className="w-full h-4 bg-neutral-100 rounded-full border border-neutral-200 overflow-hidden p-0.5">
             <div
               className="h-full rounded-full transition-all duration-200"
               style={{
                 width: `${(bossHp / currentBoss.maxHp) * 100}%`,
                 background: 'linear-gradient(90deg, #ff0055, #ff5500)',
-                boxShadow: '0 0 12px rgba(255, 0, 85, 0.7)',
+                boxShadow: '0 0 12px rgba(255, 0, 85, 0.4)',
               }}
             />
           </div>
@@ -351,33 +351,33 @@ export const BossBattleMode: React.FC = () => {
         >
           {currentBoss.icon}
         </div>
-        <div className="text-xs font-mono text-slate-400 mb-6 italic">
+        <div className="text-xs font-mono text-neutral-500 mb-6 italic">
           {currentBoss.title}
         </div>
 
         {/* Player Shield & Health HUD */}
         <div className="flex items-center gap-6 mb-6">
           <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-cyan-400" />
-            <span className="text-xs font-mono text-slate-400">Shield:</span>
-            <span className="text-sm font-mono font-bold text-cyan-300">{playerShield}/50</span>
+            <Shield className="w-4 h-4 text-cyan-600" />
+            <span className="text-xs font-mono text-neutral-500">Shield:</span>
+            <span className="text-sm font-mono font-bold text-cyan-700">{playerShield}/50</span>
           </div>
           <div className="flex items-center gap-2">
-            <Heart className="w-4 h-4 text-rose-500" />
-            <span className="text-xs font-mono text-slate-400">HP:</span>
-            <span className="text-sm font-mono font-bold text-rose-400">{playerHp}/100</span>
+            <Heart className="w-4 h-4 text-rose-600" />
+            <span className="text-xs font-mono text-neutral-500">HP:</span>
+            <span className="text-sm font-mono font-bold text-rose-600">{playerHp}/100</span>
           </div>
           <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-400" />
-            <span className="text-xs font-mono text-slate-400">Speed:</span>
-            <span className="text-sm font-mono font-bold text-amber-300">{wpm} WPM</span>
+            <Zap className="w-4 h-4 text-amber-500" />
+            <span className="text-xs font-mono text-neutral-500">Speed:</span>
+            <span className="text-sm font-mono font-bold text-[#ff5500]">{wpm} WPM</span>
           </div>
         </div>
 
         {/* Typing Word Bar */}
         <div
           onClick={() => inputRef.current?.focus()}
-          className="w-full max-w-xl p-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 flex items-center justify-center cursor-text relative"
+          className="w-full max-w-xl p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex items-center justify-center cursor-text relative shadow-inner"
         >
           <input
             ref={inputRef}
@@ -394,16 +394,16 @@ export const BossBattleMode: React.FC = () => {
             {words.slice(currentWordIdx, currentWordIdx + 3).map((w, idx) => {
               if (idx === 0) {
                 return (
-                  <span key={idx} className="font-bold text-cyan-300 border-b-2 border-cyan-400 pb-0.5">
+                  <span key={idx} className="font-bold text-[#ff5500] border-b-2 border-[#ff5500] pb-0.5">
                     {w.split('').map((char, cIdx) => (
                       <span
                         key={cIdx}
                         className={
                           typedChars[cIdx] === undefined
-                            ? 'text-cyan-400'
+                            ? 'text-neutral-500'
                             : typedChars[cIdx] === char
-                            ? 'text-white'
-                            : 'text-rose-500 bg-rose-950/60'
+                            ? 'text-[#ff5500] font-black'
+                            : 'text-rose-600 bg-rose-100 rounded'
                         }
                       >
                         {char}
@@ -413,7 +413,7 @@ export const BossBattleMode: React.FC = () => {
                 );
               }
               return (
-                <span key={idx} className="text-slate-600">
+                <span key={idx} className="text-neutral-400">
                   {w}
                 </span>
               );
@@ -423,12 +423,12 @@ export const BossBattleMode: React.FC = () => {
 
         {/* Victory Screen */}
         {gameState === 'victory' && (
-          <div className="absolute inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center z-50 p-6 animate-fadeIn">
-            <Trophy className="w-16 h-16 text-amber-400 mb-3 animate-bounce" />
-            <h3 className="text-3xl font-mono font-black text-amber-300 tracking-wider">
+          <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 p-6 animate-fadeIn">
+            <Trophy className="w-16 h-16 text-amber-500 mb-3 animate-bounce" />
+            <h3 className="text-3xl font-mono font-black text-neutral-900 tracking-wider">
               VICTORY! BOSS VANQUISHED
             </h3>
-            <p className="text-xs font-mono text-cyan-300 mt-1 mb-6">
+            <p className="text-xs font-mono text-[#ff5500] font-bold mt-1 mb-6">
               You conquered {currentBoss.name}!
             </p>
             <button
@@ -437,7 +437,7 @@ export const BossBattleMode: React.FC = () => {
                 setBossIndex(nextBoss);
                 initBattle(nextBoss);
               }}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-mono font-bold tracking-wider hover:opacity-90"
+              className="btn-orange-pill px-6 py-3 rounded-xl font-mono font-bold tracking-wider shadow-md"
             >
               NEXT BOSS BATTLE
             </button>
@@ -446,17 +446,17 @@ export const BossBattleMode: React.FC = () => {
 
         {/* Defeat Screen */}
         {gameState === 'defeat' && (
-          <div className="absolute inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center z-50 p-6 animate-fadeIn">
-            <Skull className="w-16 h-16 text-rose-500 mb-3 animate-pulse" />
-            <h3 className="text-3xl font-mono font-black text-rose-400 tracking-wider">
+          <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 p-6 animate-fadeIn">
+            <Skull className="w-16 h-16 text-rose-600 mb-3 animate-pulse" />
+            <h3 className="text-3xl font-mono font-black text-rose-600 tracking-wider">
               SHIELD CORRUPTED // DEFEAT
             </h3>
-            <p className="text-xs font-mono text-slate-400 mt-1 mb-6">
+            <p className="text-xs font-mono text-neutral-600 mt-1 mb-6">
               The boss overwhelmed your defense. Train your muscle memory and strike again!
             </p>
             <button
               onClick={() => initBattle(bossIndex)}
-              className="px-6 py-3 rounded-xl bg-rose-500 text-white font-mono font-bold tracking-wider hover:bg-rose-400"
+              className="px-6 py-3 rounded-xl bg-rose-600 text-white font-mono font-bold tracking-wider hover:bg-rose-500 shadow-md"
             >
               RETRY BATTLE
             </button>

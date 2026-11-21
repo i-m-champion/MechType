@@ -131,6 +131,26 @@ export class ErgonomicsService {
     }
     return weakKeys;
   }
+
+  public generateDrillWords(finger: string, count: number = 10): string[] {
+    const drillMap: Record<string, string[]> = {
+      left_pinky: ['quick', 'aqua', 'quiet', 'quiz', 'plaza', 'zebra', 'zoom', 'zap'],
+      left_ring: ['sweet', 'switch', 'slow', 'wax', 'six', 'wish', 'west', 'swim'],
+      left_middle: ['deck', 'dice', 'dance', 'code', 'click', 'duck', 'edge', 'deep'],
+      left_index: ['fast', 'frame', 'great', 'target', 'flight', 'type', 'track', 'gear'],
+      thumb: ['space', 'bar', 'jump', 'rest', 'rhythm', 'pace', 'beat', 'groove'],
+      right_index: ['jump', 'hunt', 'join', 'night', 'high', 'mute', 'math', 'just'],
+      right_middle: ['king', 'kick', 'like', 'milk', 'kind', 'silk', 'link', 'make'],
+      right_ring: ['loop', 'pool', 'look', 'open', 'soil', 'spin', 'loss', 'plot'],
+      right_pinky: ['type', 'post', 'pass', 'plus', 'peak', 'pray', 'ping', 'plum'],
+    };
+    const pool = drillMap[finger] || ['switch', 'tactile', 'click', 'rhythm', 'spring'];
+    const res: string[] = [];
+    for (let i = 0; i < count; i++) {
+      res.push(pool[i % pool.length]);
+    }
+    return res;
+  }
 }
 
 export const ergonomicsService = ErgonomicsService.getInstance();

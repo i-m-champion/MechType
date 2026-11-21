@@ -146,23 +146,23 @@ export const SuddenDeathMode: React.FC = () => {
       )}
 
       {/* Mode Header */}
-      <div className="flex items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 backdrop-blur-md">
+      <div className="flex items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs">
         <div className="flex items-center gap-2">
           <Skull className="w-5 h-5 text-rose-500" />
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-400">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-600">
             SUDDEN DEATH // 1-TYPO KEYBOARD JAM
           </span>
         </div>
         <div className="flex items-center gap-6 text-xs font-mono">
-          <span className="flex items-center gap-1.5 text-amber-400">
+          <span className="flex items-center gap-1.5 text-[#ff5500] font-bold">
             <Flame className="w-4 h-4" /> Streak: {streak} chars
           </span>
-          <span className="text-slate-400">
+          <span className="text-neutral-500">
             Record: {bestStreak} chars
           </span>
           <button
             onClick={initGame}
-            className="p-1 rounded bg-white/5 hover:bg-white/10 text-slate-300"
+            className="p-1 rounded bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-700"
             title="Restart"
           >
             <RotateCcw className="w-4 h-4" />
@@ -173,10 +173,10 @@ export const SuddenDeathMode: React.FC = () => {
       {/* Hardcore Typing Chamber */}
       <div
         onClick={() => inputRef.current?.focus()}
-        className={`w-full min-h-[220px] p-8 rounded-2xl border transition-all duration-300 relative cursor-text flex flex-col items-center justify-center select-none shadow-2xl ${
+        className={`w-full min-h-[220px] p-8 rounded-2xl border transition-all duration-300 relative cursor-text flex flex-col items-center justify-center select-none shadow-sm ${
           isJammed
-            ? 'bg-rose-950/40 border-rose-500 shadow-rose-900/50'
-            : 'bg-slate-950/70 border-white/10'
+            ? 'bg-rose-50 border-rose-300 shadow-rose-100'
+            : 'bg-white border-neutral-200/90'
         }`}
       >
         <input
@@ -192,7 +192,7 @@ export const SuddenDeathMode: React.FC = () => {
 
         {!isJammed ? (
           <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-2 text-rose-400/80 text-xs font-mono uppercase tracking-widest animate-pulse">
+            <div className="flex items-center gap-2 text-rose-600 text-xs font-mono uppercase tracking-widest font-bold">
               <AlertTriangle className="w-4 h-4" /> Zero Tolerance for Errors
             </div>
 
@@ -206,16 +206,15 @@ export const SuddenDeathMode: React.FC = () => {
                     key={idx}
                     className={`relative ${
                       isTyped
-                        ? 'text-emerald-400 font-bold'
+                        ? 'text-emerald-600 font-bold'
                         : isCurrent
-                        ? 'text-cyan-300 font-bold'
-                        : 'text-slate-600'
+                        ? 'text-[#ff5500] font-bold'
+                        : 'text-neutral-300'
                     }`}
                   >
                     {isCurrent && (
                       <span
-                        className="absolute -left-1 top-0 bottom-0 w-1 animate-pulse"
-                        style={{ backgroundColor: themeConfig.accent }}
+                        className="absolute -left-1 top-0 bottom-0 w-1 animate-pulse bg-[#ff5500]"
                       />
                     )}
                     {char}
@@ -223,29 +222,29 @@ export const SuddenDeathMode: React.FC = () => {
                 );
               })}
               {charIdx === currentWord.length && (
-                <span className="text-xs font-mono ml-2 px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 animate-pulse">
+                <span className="text-xs font-mono ml-2 px-1.5 py-0.5 rounded bg-orange-100 text-[#ff5500] font-bold animate-pulse">
                   [SPACE]
                 </span>
               )}
             </div>
 
-            <div className="text-xs font-mono text-slate-500 mt-2">
+            <div className="text-xs font-mono text-neutral-400 mt-2">
               Next: {words.slice(currentWordIdx + 1, currentWordIdx + 4).join(' ')}
             </div>
           </div>
         ) : (
           /* Jammed Screen */
           <div className="flex flex-col items-center gap-3 text-center animate-bounce">
-            <AlertTriangle className="w-12 h-12 text-rose-500" />
-            <h3 className="text-2xl font-mono font-black text-rose-400 tracking-wider">
+            <AlertTriangle className="w-12 h-12 text-rose-600" />
+            <h3 className="text-2xl font-mono font-black text-rose-600 tracking-wider">
               KEYBOARD JAMMED! RUN TERMINATED
             </h3>
-            <p className="text-xs font-mono text-slate-400">
-              A single stumble stopped your streak at <span className="text-amber-400 font-bold">{streak} characters</span>.
+            <p className="text-xs font-mono text-neutral-600">
+              A single stumble stopped your streak at <span className="text-[#ff5500] font-bold">{streak} characters</span>.
             </p>
             <button
               onClick={initGame}
-              className="mt-4 px-6 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-mono font-bold text-xs"
+              className="mt-4 px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-mono font-bold text-xs shadow-md"
             >
               UNJAM & RE-ATTEMPT HARDCORE
             </button>

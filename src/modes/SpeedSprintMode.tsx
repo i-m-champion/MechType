@@ -1,13 +1,28 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { getRandomWords } from '../data/wordlists';
 import { soundEngine } from '../audio/SoundEngine';
-import { lofiRhythmEngine } from '../audio/LofiRhythmEngine';
-import { getOverdriveTier, OverdriveTier } from '../types/overdrive';
-import { useTheme } from '../context/ThemeContext';
-import { RotateCcw, Clock, Award, Target, Zap, AlertCircle } from 'lucide-react';
+import { historyService } from '../services/historyService';
+import {
+  RotateCcw,
+  Clock,
+  Zap,
+  Target,
+  Award,
+  Flame,
+  ArrowRight,
+  TrendingUp,
+} from 'lucide-react';
+import { OverdriveTier, getOverdriveTier } from '../types/overdrive';
+import { GhostRacer } from '../components/multiplayer/GhostRacer';
 
-interface SpeedSprintProps {
-  onKeystrokeStats?: (char: string, code: string, isCorrect: boolean, latencyMs: number) => void;
+interface SpeedSprintModeProps {
+  onKeystrokeStats?: (
+    key: string,
+    code: string,
+    isCorrect: boolean,
+    latencyMs: number
+  ) => void;
+  onLiveWpmUpdate?: (wpm: number, streak: number) => void;
+  onCaretPositionUpdate?: (rect: { x: number; y: number } | null) => void;
   onTestComplete?: (result: {
     wpm: number;
     rawWpm: number;
@@ -19,224 +34,260 @@ interface SpeedSprintProps {
   onWpmUpdate?: (wpm: number, kps: number) => void;
 }
 
-export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
+// Top standard benchmark wordlist (Monkeytype style)
+const TOP_WORDS = [
+  'the', 'be', 'of', 'and', 'a', 'to', 'in', 'he', 'have', 'it', 'that', 'for',
+  'they', 'I', 'with', 'as', 'not', 'on', 'she', 'at', 'by', 'this', 'we', 'you',
+  'do', 'but', 'his', 'from', 'they', 'say', 'her', 'she', 'or', 'an', 'will',
+  'my', 'one', 'all', 'would', 'there', 'their', 'what', 'so', 'up', 'out', 'if',
+  'about', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time',
+  'no', 'just', 'him', 'know', 'take', 'people', 'into', 'year', 'your', 'good',
+  'some', 'could', 'them', 'see', 'other', 'than', 'then', 'now', 'look', 'only',
+  'come', 'its', 'over', 'think', 'also', 'back', 'after', 'use', 'two', 'how',
+  'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any',
+  'these', 'give', 'day', 'most', 'us', 'sound', 'great', 'right', 'place', 'switch',
+  'mechanical', 'click', 'tactile', 'linear', 'spring', 'smooth', 'speed', 'rhythm',
+  'keyboard', 'engine', 'thock', 'clack', 'chassis', 'stabilizer', 'keycap', 'matrix'
+];
+
+function getRandomWords(count: number = 80): string[] {
+  const words: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const randomIdx = Math.floor(Math.random() * TOP_WORDS.length);
+    words.push(TOP_WORDS[randomIdx]);
+  }
+  return words;
+}
+
+export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
   onKeystrokeStats,
+  onLiveWpmUpdate,
+  onCaretPositionUpdate,
   onTestComplete,
   onParticleTrigger,
   onWpmUpdate,
 }) => {
-  const { themeConfig } = useTheme();
   const [duration, setDuration] = useState<number>(30); // 15, 30, 60, 120
-  const [words, setWords] = useState<string[]>([]);
-  const [currentWordIdx, setCurrentWordIdx] = useState(0);
+  const [timeLeft, setTimeLeft] = useState<number>(30);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
+
+  const [words, setWords] = useState<string[]>(() => getRandomWords(100));
+  const [currentWordIdx, setCurrentWordIdx] = useState<number>(0);
   const [typedChars, setTypedChars] = useState<string>('');
-  const [history, setHistory] = useState<{ word: string; typed: string; isCorrect: boolean }[]>([]);
+  const [history, setHistory] = useState<{ typed: string; isCorrect: boolean }[]>([]);
 
-  // State flags
-  const [isActive, setIsActive] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
+  // Analytics
+  const [correctChars, setCorrectChars] = useState<number>(0);
+  const [incorrectChars, setIncorrectChars] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
+  const [wpm, setWpm] = useState<number>(0);
+  const [rawWpm, setRawWpm] = useState<number>(0);
+  const [accuracy, setAccuracy] = useState<number>(100);
 
-  // Live Metrics
-  const [wpm, setWpm] = useState(0);
-  const [rawWpm, setRawWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
-  const [correctChars, setCorrectChars] = useState(0);
-  const [incorrectChars, setIncorrectChars] = useState(0);
-
-  const startTimeRef = useRef<number | null>(null);
-  const lastKeyTimeRef = useRef<number>(performance.now());
+  // Timing
+  const timerRef = useRef<any>(null);
+  const lastKeyTimeRef = useRef<number>(Date.now());
   const inputRef = useRef<HTMLInputElement>(null);
-  const activeCharSpanRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const activeCharSpanRef = useRef<HTMLSpanElement>(null);
 
-  // Initialize test
-  const resetTest = useCallback((newDuration = duration) => {
-    const generated = getRandomWords(80);
-    setWords(generated);
-    setCurrentWordIdx(0);
-    setTypedChars('');
-    setHistory([]);
-    setIsActive(false);
-    setIsFinished(false);
-    setTimeLeft(newDuration);
-    setWpm(0);
-    setRawWpm(0);
-    setAccuracy(100);
-    setCorrectChars(0);
-    setIncorrectChars(0);
-    startTimeRef.current = null;
-    if (inputRef.current) {
-      inputRef.current.value = '';
-      inputRef.current.focus();
-    }
-  }, [duration]);
+  // Ghost Racing
+  const [elapsedMs, setElapsedMs] = useState<number>(0);
+  const bestRun = historyService.getBestWpm() || 75;
 
+  const resetTest = useCallback(
+    (newDuration: number = duration) => {
+      clearInterval(timerRef.current);
+      setDuration(newDuration);
+      setTimeLeft(newDuration);
+      setIsActive(false);
+      setIsFinished(false);
+      setWords(getRandomWords(100));
+      setCurrentWordIdx(0);
+      setTypedChars('');
+      setHistory([]);
+      setCorrectChars(0);
+      setIncorrectChars(0);
+      setStreak(0);
+      setWpm(0);
+      setRawWpm(0);
+      setAccuracy(100);
+      setElapsedMs(0);
+      lastKeyTimeRef.current = Date.now();
+
+      if (onLiveWpmUpdate) onLiveWpmUpdate(0, 0);
+      if (onCaretPositionUpdate) onCaretPositionUpdate(null);
+
+      setTimeout(() => inputRef.current?.focus(), 50);
+    },
+    [duration, onLiveWpmUpdate, onCaretPositionUpdate]
+  );
+
+  // Keyboard shortcut listener: Tab + Enter or Esc to reset
   useEffect(() => {
-    resetTest(duration);
-  }, [duration, resetTest]);
-
-  // Timer countdown and live WPM recalculation
-  useEffect(() => {
-    if (!isActive || isFinished) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          finishTest();
-          return 0;
-        }
-        return prev - 1;
-      });
-
-      // Update Live WPM
-      if (startTimeRef.current) {
-        const elapsedSec = (performance.now() - startTimeRef.current) / 1000;
-        if (elapsedSec > 0.5) {
-          const totalWords = (correctChars + incorrectChars) / 5;
-          const liveRawWpm = Math.round((totalWords / elapsedSec) * 60);
-          const liveNetWpm = Math.max(0, Math.round(((correctChars / 5) / elapsedSec) * 60));
-          const liveKps = parseFloat(((correctChars + incorrectChars) / elapsedSec).toFixed(1));
-
-          setRawWpm(liveRawWpm);
-          setWpm(liveNetWpm);
-
-          if (onWpmUpdate) {
-            onWpmUpdate(liveNetWpm, liveKps);
-          }
-        }
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        resetTest();
       }
-    }, 200);
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [resetTest]);
 
-    return () => clearInterval(timer);
-  }, [isActive, isFinished, correctChars, incorrectChars, onWpmUpdate]);
+  // Main countdown timer
+  useEffect(() => {
+    if (isActive && timeLeft > 0) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current);
+            finishTest();
+            return 0;
+          }
+          return prev - 1;
+        });
+        setElapsedMs((prev) => prev + 1000);
+      }, 1000);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [isActive, timeLeft]);
 
-  const finishTest = useCallback(() => {
+  // Caret coordinate reporting for particle bursts
+  useEffect(() => {
+    if (activeCharSpanRef.current && onCaretPositionUpdate) {
+      const rect = activeCharSpanRef.current.getBoundingClientRect();
+      onCaretPositionUpdate({
+        x: rect.right,
+        y: rect.top + rect.height / 2,
+      });
+    }
+  }, [typedChars, currentWordIdx, onCaretPositionUpdate]);
+
+  // Live WPM calculation
+  useEffect(() => {
+    const elapsedSeconds = duration - timeLeft;
+    if (elapsedSeconds > 0) {
+      // Standard WPM = (correctChars / 5) / (elapsedSeconds / 60)
+      const calculatedWpm = Math.round((correctChars / 5) / (elapsedSeconds / 60));
+      const calculatedRawWpm = Math.round(((correctChars + incorrectChars) / 5) / (elapsedSeconds / 60));
+      const total = correctChars + incorrectChars;
+      const calculatedAcc = total > 0 ? Math.round((correctChars / total) * 100) : 100;
+
+      setWpm(calculatedWpm);
+      setRawWpm(calculatedRawWpm);
+      setAccuracy(calculatedAcc);
+
+      if (onLiveWpmUpdate) {
+        onLiveWpmUpdate(calculatedWpm, streak);
+      }
+    }
+  }, [correctChars, incorrectChars, timeLeft, duration, streak, onLiveWpmUpdate]);
+
+  const finishTest = () => {
     setIsActive(false);
     setIsFinished(true);
 
-    const elapsedSec = startTimeRef.current
-      ? (performance.now() - startTimeRef.current) / 1000
-      : duration;
+    const elapsedSeconds = duration;
+    const finalWpm = Math.round((correctChars / 5) / (elapsedSeconds / 60));
+    const finalRaw = Math.round(((correctChars + incorrectChars) / 5) / (elapsedSeconds / 60));
+    const finalAcc = correctChars + incorrectChars > 0
+      ? Math.round((correctChars / (correctChars + incorrectChars)) * 100)
+      : 100;
 
-    const totalChars = correctChars + incorrectChars;
-    const finalRawWpm = Math.round(((totalChars / 5) / elapsedSec) * 60) || 0;
-    const finalNetWpm = Math.max(0, Math.round(((correctChars / 5) / elapsedSec) * 60)) || 0;
-    const finalAcc = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;
-
-    setRawWpm(finalRawWpm);
-    setWpm(finalNetWpm);
-    setAccuracy(finalAcc);
+    historyService.addRecord({
+      mode: 'speed_sprint',
+      wpm: finalWpm,
+      rawWpm: finalRaw,
+      accuracy: finalAcc,
+      duration,
+      soundProfile: soundEngine.getProfile(),
+    });
 
     if (onTestComplete) {
       onTestComplete({
-        wpm: finalNetWpm,
-        rawWpm: finalRawWpm,
+        wpm: finalWpm,
+        rawWpm: finalRaw,
         accuracy: finalAcc,
         duration,
-        mode: 'Speed Sprint',
+        mode: 'speed_sprint',
       });
     }
-  }, [correctChars, incorrectChars, duration, onTestComplete]);
+  };
 
-  // Handle typing input
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (isFinished) {
-      if (e.key === 'Enter' || e.key === 'Tab') {
-        e.preventDefault();
-        resetTest();
-      }
-      return;
-    }
+    if (isFinished) return;
 
-    if (!isActive && e.key.length === 1) {
+    // Start timer on first keystroke
+    if (!isActive) {
       setIsActive(true);
-      startTimeRef.current = performance.now();
+      lastKeyTimeRef.current = Date.now();
     }
 
-    const now = performance.now();
+    const currentWord = words[currentWordIdx];
+    const now = Date.now();
     const latency = now - lastKeyTimeRef.current;
     lastKeyTimeRef.current = now;
 
-    // Trigger Key Audio
-    const isSpace = e.key === ' ';
-    const isEnter = e.key === 'Enter';
-    const isBackspace = e.key === 'Backspace';
-
+    // Audio synthesis trigger
     soundEngine.triggerKeystroke({
       key: e.key,
       code: e.code,
       isKeyDown: true,
-      isSpacebar: isSpace,
-      isEnter: isEnter,
-      isBackspace: isBackspace,
+      isSpacebar: e.key === ' ',
+      isEnter: e.key === 'Enter',
+      isBackspace: e.key === 'Backspace',
     });
 
-    if (lofiRhythmEngine.isEnabled() && e.key.length === 1) {
-      lofiRhythmEngine.triggerHarmonizedKeystroke(e.key);
-    }
-
-    // Trigger Particle Sparks / Combustion at Caret
-    if (activeCharSpanRef.current && onParticleTrigger) {
-      const rect = activeCharSpanRef.current.getBoundingClientRect();
-      const currentTier = getOverdriveTier(wpm);
-      onParticleTrigger({ x: rect.right, y: rect.top + 12 }, currentTier);
-    }
-
-    // Handle Spacebar (Word Submission)
-    if (isSpace) {
-      e.preventDefault();
-      if (typedChars.length === 0) return;
-
-      const targetWord = words[currentWordIdx];
-      const isWordCorrect = typedChars === targetWord;
-
-      // Count character accuracy
-      let correctInWord = 0;
-      for (let i = 0; i < typedChars.length; i++) {
-        if (typedChars[i] === targetWord[i]) correctInWord++;
-      }
-      const incorrectInWord = Math.max(0, typedChars.length - correctInWord) + Math.max(0, targetWord.length - typedChars.length);
-
-      setCorrectChars((prev) => prev + correctInWord + 1); // +1 for spacebar
-      setIncorrectChars((prev) => prev + incorrectInWord);
-
-      setHistory((prev) => [
-        ...prev,
-        { word: targetWord, typed: typedChars, isCorrect: isWordCorrect },
-      ]);
-
-      setTypedChars('');
-      setCurrentWordIdx((prev) => prev + 1);
-
-      // Replenish words when approaching end
-      if (currentWordIdx > words.length - 15) {
-        setWords((prev) => [...prev, ...getRandomWords(40)]);
-      }
-
-      if (onKeystrokeStats) {
-        onKeystrokeStats(' ', 'Space', isWordCorrect, latency);
-      }
-      return;
-    }
-
-    // Handle Backspace
-    if (isBackspace) {
+    if (e.key === 'Backspace') {
       if (typedChars.length > 0) {
         setTypedChars((prev) => prev.slice(0, -1));
       }
       return;
     }
 
-    // Handle normal printable characters
-    if (e.key.length === 1) {
+    if (e.key === ' ') {
+      e.preventDefault();
+      if (typedChars.length === 0) return;
+
+      const isWordCorrect = typedChars === currentWord;
+      setHistory((prev) => [...prev, { typed: typedChars, isCorrect: isWordCorrect }]);
+
+      if (isWordCorrect) {
+        setCorrectChars((prev) => prev + currentWord.length + 1); // +1 for space
+        setStreak((prev) => prev + 1);
+      } else {
+        setIncorrectChars((prev) => prev + 1);
+        setStreak(0);
+      }
+
+      setTypedChars('');
+      setCurrentWordIdx((prev) => {
+        const next = prev + 1;
+        // Expand wordlist if nearing end
+        if (next >= words.length - 10) {
+          setWords((w) => [...w, ...getRandomWords(50)]);
+        }
+        return next;
+      });
+      return;
+    }
+
+    // Normal Character input
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const nextTyped = typedChars + e.key;
       setTypedChars(nextTyped);
 
-      const targetWord = words[currentWordIdx] || '';
-      const charIndex = typedChars.length;
-      const isCharCorrect = e.key === targetWord[charIndex];
+      const targetChar = currentWord[typedChars.length];
+      const isCharCorrect = e.key === targetChar;
+
+      if (isCharCorrect) {
+        setCorrectChars((prev) => prev + 1);
+        setStreak((prev) => prev + 1);
+      } else {
+        setIncorrectChars((prev) => prev + 1);
+        setStreak(0);
+      }
 
       if (onKeystrokeStats) {
         onKeystrokeStats(e.key, e.code, isCharCorrect, latency);
@@ -260,11 +311,11 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Test Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-[#0f1219] border border-[#232838] shadow-md gap-3">
+      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs gap-3">
         {/* Time Selector */}
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#ff5500]" />
-          <span className="text-xs font-mono text-neutral-400 uppercase">Duration:</span>
+          <span className="text-xs font-mono text-neutral-500 uppercase">Duration:</span>
           {[15, 30, 60, 120].map((t) => (
             <button
               key={t}
@@ -274,8 +325,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
               }}
               className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
                 duration === t
-                  ? 'bg-[#1c2230] text-white font-bold border border-[#ff5500] shadow-sm'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-neutral-100 text-neutral-900 font-bold border border-[#ff5500] shadow-xs'
+                  : 'text-neutral-500 hover:text-neutral-900'
               }`}
             >
               {t}s
@@ -286,21 +337,21 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         {/* Live Metrics Display */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-neutral-400 uppercase">Timer:</span>
-            <span className="text-lg font-mono font-black text-white">
+            <span className="text-xs font-mono text-neutral-500 uppercase">Timer:</span>
+            <span className="text-lg font-mono font-black text-neutral-900">
               {timeLeft}s
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-neutral-400 uppercase">WPM:</span>
+            <span className="text-xs font-mono text-neutral-500 uppercase">WPM:</span>
             <span
               className={`text-lg font-mono font-black transition-colors ${
                 currentTier === 'overdrive'
                   ? 'text-[#ff5500] animate-pulse'
                   : currentTier === 'combustion'
-                  ? 'text-orange-500'
-                  : 'text-white'
+                  ? 'text-orange-600'
+                  : 'text-neutral-900'
               }`}
             >
               {wpm}
@@ -308,8 +359,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-neutral-400 uppercase">Acc:</span>
-            <span className="text-lg font-mono font-black text-emerald-400">
+            <span className="text-xs font-mono text-neutral-500 uppercase">Acc:</span>
+            <span className="text-lg font-mono font-black text-emerald-600">
               {correctChars + incorrectChars > 0
                 ? `${Math.round((correctChars / (correctChars + incorrectChars)) * 100)}%`
                 : '100%'}
@@ -318,8 +369,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
 
           <button
             onClick={() => resetTest()}
-            className="p-1.5 rounded-lg bg-[#141824] border border-[#232838] text-neutral-300 hover:text-white transition-colors shadow-sm"
-            title="Restart Test (Tab + Enter)"
+            className="p-1.5 rounded-lg bg-neutral-50 border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors shadow-xs"
+            title="Restart Test (Esc)"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -330,7 +381,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
       <div
         ref={containerRef}
         onClick={() => inputRef.current?.focus()}
-        className="w-full min-h-[170px] p-6 sm:p-8 rounded-2xl bg-[#08090d] border border-[#232838] relative cursor-text overflow-hidden select-none shadow-xl"
+        className="w-full min-h-[170px] p-6 sm:p-8 rounded-2xl bg-white border border-neutral-200/90 relative cursor-text overflow-hidden select-none shadow-sm"
       >
         {/* Hidden Input for Touch & Focus */}
         <input
@@ -357,7 +408,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                 <span
                   key={actualIdx}
                   className={`transition-colors ${
-                    historyItem.isCorrect ? 'text-neutral-400 dark:text-slate-600' : 'text-rose-600 dark:text-rose-500/80 underline decoration-rose-500'
+                    historyItem.isCorrect ? 'text-neutral-400' : 'text-rose-600 underline decoration-rose-500'
                   }`}
                 >
                   {historyItem.typed}
@@ -373,11 +424,11 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                 >
                   {word.split('').map((char, charIdx) => {
                     const typedChar = typedChars[charIdx];
-                    let charColor = 'text-neutral-800 dark:text-slate-300 font-medium';
+                    let charColor = 'text-neutral-800 font-medium';
                     let isCaretHere = charIdx === typedChars.length;
 
                     if (typedChar !== undefined) {
-                      charColor = typedChar === char ? 'text-[#ff5500] dark:text-cyan-300 font-bold' : 'text-rose-600 dark:text-rose-400 bg-rose-500/20 rounded';
+                      charColor = typedChar === char ? 'text-[#ff5500] font-bold' : 'text-rose-600 bg-rose-50 font-bold rounded';
                     }
 
                     return (
@@ -388,7 +439,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                       >
                         {isCaretHere && (
                           <span
-                            className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse bg-[#ff5500] dark:bg-cyan-400"
+                            className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse bg-[#ff5500]"
                           />
                         )}
                         {char}
@@ -399,7 +450,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                   {/* Trailing extra typos typed beyond word length */}
                   {typedChars.length > word.length &&
                     typedChars.slice(word.length).split('').map((extraChar, extraIdx) => (
-                      <span key={`extra-${extraIdx}`} className="text-rose-600 bg-rose-500/20 rounded">
+                      <span key={`extra-${extraIdx}`} className="text-rose-600 bg-rose-50 font-bold rounded">
                         {extraChar}
                       </span>
                     ))}
@@ -408,7 +459,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                   {typedChars.length >= word.length && (
                     <span
                       ref={activeCharSpanRef}
-                      className="w-0.5 h-7 animate-pulse inline-block align-middle ml-0.5 bg-[#ff5500] dark:bg-cyan-400"
+                      className="w-0.5 h-7 animate-pulse inline-block align-middle ml-0.5 bg-[#ff5500]"
                     />
                   )}
                 </span>
@@ -416,7 +467,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
             }
 
             return (
-              <span key={actualIdx} className="text-neutral-400 dark:text-slate-600 transition-colors">
+              <span key={actualIdx} className="text-neutral-400 transition-colors">
                 {word}
               </span>
             );
@@ -424,8 +475,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         </div>
 
         {!isActive && !isFinished && (
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
-            <span className="text-xs font-mono text-white font-bold uppercase tracking-widest animate-pulse px-3.5 py-1.5 rounded-lg bg-[#0f1219] border border-[#ff5500]/40 shadow-md text-[#ff5500]">
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest animate-pulse px-3.5 py-1.5 rounded-lg bg-white border border-[#ff5500] shadow-sm text-[#ff5500]">
               CLICK OR PRESS ANY KEY TO INITIALIZE SPRINT
             </span>
           </div>
@@ -434,39 +485,39 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
 
       {/* Completion Modal */}
       {isFinished && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="w-full max-w-md p-6 rounded-2xl bg-slate-900 border border-cyan-500/40 shadow-2xl flex flex-col items-center">
-            <Award className="w-12 h-12 text-cyan-400 mb-3 animate-bounce" />
-            <h3 className="text-2xl font-mono font-black text-slate-100 tracking-wider">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-md p-6 rounded-2xl bg-white border border-neutral-200 shadow-2xl flex flex-col items-center">
+            <Award className="w-12 h-12 text-[#ff5500] mb-3 animate-bounce" />
+            <h3 className="text-2xl font-mono font-black text-neutral-900 tracking-wider">
               SPEED SPRINT COMPLETE
             </h3>
-            <p className="text-xs font-mono text-cyan-400 mb-6">BENCHMARK CERTIFIED</p>
+            <p className="text-xs font-mono text-[#ff5500] mb-6 font-bold uppercase">BENCHMARK CERTIFIED</p>
 
             <div className="grid grid-cols-2 gap-4 w-full mb-6">
-              <div className="p-4 rounded-xl bg-slate-800/60 border border-white/5 flex flex-col items-center">
-                <span className="text-xs font-mono text-slate-400 uppercase">Net WPM</span>
-                <span className="text-3xl font-mono font-black text-cyan-400">{wpm}</span>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center">
+                <span className="text-xs font-mono text-neutral-500 uppercase">Net WPM</span>
+                <span className="text-3xl font-mono font-black text-[#ff5500]">{wpm}</span>
               </div>
-              <div className="p-4 rounded-xl bg-slate-800/60 border border-white/5 flex flex-col items-center">
-                <span className="text-xs font-mono text-slate-400 uppercase">Raw WPM</span>
-                <span className="text-3xl font-mono font-black text-slate-200">{rawWpm}</span>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center">
+                <span className="text-xs font-mono text-neutral-500 uppercase">Raw WPM</span>
+                <span className="text-3xl font-mono font-black text-neutral-900">{rawWpm}</span>
               </div>
-              <div className="p-4 rounded-xl bg-slate-800/60 border border-white/5 flex flex-col items-center">
-                <span className="text-xs font-mono text-slate-400 uppercase">Accuracy</span>
-                <span className="text-2xl font-mono font-bold text-emerald-400">{accuracy}%</span>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center">
+                <span className="text-xs font-mono text-neutral-500 uppercase">Accuracy</span>
+                <span className="text-2xl font-mono font-bold text-emerald-600">{accuracy}%</span>
               </div>
-              <div className="p-4 rounded-xl bg-slate-800/60 border border-white/5 flex flex-col items-center">
-                <span className="text-xs font-mono text-slate-400 uppercase">Duration</span>
-                <span className="text-2xl font-mono font-bold text-slate-200">{duration}s</span>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 flex flex-col items-center">
+                <span className="text-xs font-mono text-neutral-500 uppercase">Duration</span>
+                <span className="text-2xl font-mono font-bold text-neutral-900">{duration}s</span>
               </div>
             </div>
 
             <button
               onClick={() => resetTest()}
-              className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2"
+              className="btn-orange-pill w-full py-3 rounded-xl font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 shadow-md"
             >
               <RotateCcw className="w-4 h-4" />
-              REPEAT SPRINT (TAB + ENTER)
+              REPEAT SPRINT
             </button>
           </div>
         </div>

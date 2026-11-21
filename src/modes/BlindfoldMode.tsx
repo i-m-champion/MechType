@@ -105,18 +105,18 @@ export const BlindfoldMode: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Mode Header */}
-      <div className="flex items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 backdrop-blur-md">
+      <div className="flex items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-white border border-neutral-200/90 shadow-xs">
         <div className="flex items-center gap-2">
-          <EyeOff className="w-5 h-5 text-purple-400" />
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+          <EyeOff className="w-5 h-5 text-[#ff5500]" />
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-800">
             BLINDFOLD MODE // 100% INVISIBLE INK
           </span>
         </div>
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-400">
+        <div className="flex items-center gap-4 text-xs font-mono text-neutral-500">
           <span>Words: {typedWords.length} / {words.length}</span>
           <button
             onClick={initTest}
-            className="p-1 rounded bg-white/5 hover:bg-white/10 text-slate-300"
+            className="p-1 rounded bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-700"
             title="Reset"
           >
             <RotateCcw className="w-4 h-4" />
@@ -127,7 +127,7 @@ export const BlindfoldMode: React.FC = () => {
       {/* Typing Surface */}
       <div
         onClick={() => inputRef.current?.focus()}
-        className="w-full min-h-[220px] p-8 rounded-2xl bg-slate-950/70 border border-purple-500/30 relative cursor-text flex flex-col items-center justify-center select-none shadow-2xl"
+        className="w-full min-h-[220px] p-8 rounded-2xl bg-white border border-neutral-200/90 relative cursor-text flex flex-col items-center justify-center select-none shadow-sm text-neutral-900"
       >
         <input
           ref={inputRef}
@@ -142,44 +142,44 @@ export const BlindfoldMode: React.FC = () => {
 
         {!isFinished ? (
           <div className="flex flex-col items-center gap-4 text-center">
-            <EyeOff className="w-12 h-12 text-purple-400/50 animate-pulse" />
-            <h4 className="text-xl font-mono text-slate-300 font-bold">
+            <EyeOff className="w-12 h-12 text-[#ff5500]/60 animate-pulse" />
+            <h4 className="text-xl font-mono text-neutral-800 font-bold">
               THE INK IS INVISIBLE
             </h4>
-            <p className="text-xs font-mono text-slate-500 max-w-md">
-              Target word {typedWords.length + 1} of {words.length}: [ <span className="text-cyan-400 font-bold">{words[typedWords.length]}</span> ]
+            <p className="text-xs font-mono text-neutral-500 max-w-md">
+              Target word {typedWords.length + 1} of {words.length}: [ <span className="text-[#ff5500] font-bold">{words[typedWords.length]}</span> ]
             </p>
             <div className="flex gap-1.5 mt-2">
               {currentInput.split('').map((_, idx) => (
-                <span key={idx} className="w-3 h-3 rounded-full bg-purple-500/80 animate-ping inline-block" />
+                <span key={idx} className="w-3 h-3 rounded-full bg-[#ff5500]/80 animate-ping inline-block" />
               ))}
-              <span className="w-2 h-5 bg-cyan-400 animate-pulse inline-block" />
+              <span className="w-2 h-5 bg-[#ff5500] animate-pulse inline-block" />
             </div>
           </div>
         ) : (
           /* Dramatic Reveal */
           <div className="w-full flex flex-col items-center animate-fadeIn">
-            <div className="flex items-center gap-2 text-emerald-400 mb-2">
+            <div className="flex items-center gap-2 text-emerald-600 mb-2">
               <Eye className="w-6 h-6" />
               <span className="font-mono font-bold text-lg">INK REVEALED!</span>
             </div>
             <div className="flex gap-6 my-4 font-mono">
               <div className="text-center">
-                <div className="text-xs text-slate-400">Blind WPM</div>
-                <div className="text-2xl font-bold text-cyan-400">{blindWpm}</div>
+                <div className="text-xs text-neutral-500">Blind WPM</div>
+                <div className="text-2xl font-bold text-[#ff5500]">{blindWpm}</div>
               </div>
               <div className="text-center">
-                <div className="text-xs text-slate-400">Accuracy</div>
-                <div className="text-2xl font-bold text-emerald-400">{accuracy}%</div>
+                <div className="text-xs text-neutral-500">Accuracy</div>
+                <div className="text-2xl font-bold text-emerald-600">{accuracy}%</div>
               </div>
               <div className="text-center">
-                <div className="text-xs text-slate-400">Correct Words</div>
-                <div className="text-2xl font-bold text-slate-200">{correctWords}/{words.length}</div>
+                <div className="text-xs text-neutral-500">Correct Words</div>
+                <div className="text-2xl font-bold text-neutral-900">{correctWords}/{words.length}</div>
               </div>
             </div>
 
             {/* Comparison Stream */}
-            <div className="flex flex-wrap gap-2 justify-center max-w-2xl font-mono text-sm mt-3 p-4 rounded-xl bg-slate-900/60 border border-white/5">
+            <div className="flex flex-wrap gap-2 justify-center max-w-2xl font-mono text-sm mt-3 p-4 rounded-xl bg-neutral-50 border border-neutral-200">
               {words.map((target, idx) => {
                 const typed = typedWords[idx] || '';
                 const isMatch = typed === target;
