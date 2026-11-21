@@ -250,93 +250,51 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
     []
   );
 
-  // Main countdown timer & live telemetry tick
-  useEffect(() => {
-    if (isActive && timeLeft > 0) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerRef.current);
-            finishTest();
-            return 0;
-          }
-          return prev - 1;
-        });
-
-        // Track live millisecond progression
-        if (startTimeRef.current) {
-          const now = performance.now();
-          const elapsedSec = (now - startTimeRef.current) / 1000;
-          setElapsedMs(Math.round(elapsedSec * 1000));
-
-          // Record second-by-second Raw WPM sample for Monkeytype consistency calculation
-          const currentWord = words[currentWordIdx] || '';
-          const metrics = calculateMonkeytypeMetrics(
-            history,
-            typedChars,
-            currentWord,
-            elapsedSec,
-            correctKeystrokes,
-            incorrectKeystrokes
-          );
-
-          setWpm(metrics.wpm);
-          setRawWpm(metrics.rawWpm);
-          setAccuracy(metrics.accuracy);
-          setNetCorrectChars(metrics.netCorrectChars);
-          setTotalRawChars(metrics.totalRawChars);
-          rawWpmHistoryRef.current.push(metrics.rawWpm);
-
-          if (onLiveWpmUpdate) {
-            onLiveWpmUpdate(metrics.wpm, streak);
-          }
-          if (onWpmUpdate) {
-            const kps = Number((metrics.rawWpm / 12).toFixed(1));
-            onWpmUpdate(metrics.wpm, kps);
-          }
-        }
-      }, 1000);
-    }
-    return () => clearInterval(timerRef.current);
-  }, [
-    isActive,
-    timeLeft,
+  // Stable ref holding latest mutable typing state to avoid restarting timer interval on every keystroke
+  const latestStateRef = useRef({
+    duration,
+    words,
+    currentWordIdx,
     history,
     typedChars,
-    currentWordIdx,
-    words,
     correctKeystrokes,
     incorrectKeystrokes,
     streak,
-    calculateMonkeytypeMetrics,
-    onLiveWpmUpdate,
-    onWpmUpdate,
-  ]);
+  });
 
-  // Caret coordinate reporting for particle bursts
+  // Always keep latestStateRef in sync with latest component state
   useEffect(() => {
-    if (activeCharSpanRef.current && onCaretPositionUpdate) {
-      const rect = activeCharSpanRef.current.getBoundingClientRect();
-      onCaretPositionUpdate({
-        x: rect.right,
-        y: rect.top + rect.height / 2,
-      });
-    }
-  }, [typedChars, currentWordIdx, onCaretPositionUpdate]);
+    latestStateRef.current = {
+      duration,
+      words,
+      currentWordIdx,
+      history,
+      typedChars,
+      correctKeystrokes,
+      incorrectKeystrokes,
+      streak,
+    };
+  });
 
   /**
    * Final Benchmark Calculation when timer expires
    */
-  const finishTest = () => {
+  const finishTest = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     setIsActive(false);
     setIsFinished(true);
+    setTimeLeft(0);
 
-    const testMinutes = duration / 60;
-    const currentWord = words[currentWordIdx] || '';
+    const state = latestStateRef.current;
+    const testMinutes = state.duration / 60;
+    const currentWord = state.words[state.currentWordIdx] || '';
 
     // Final Monkeytype Net & Raw calculation
     let finalNetCorrectChars = 0;
-    for (const item of history) {
+    for (const item of state.history) {
       if (item.isCorrect) {
         finalNetCorrectChars += item.target.length + 1;
       }
@@ -345,8 +303,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
     // Active word credit at the buzzer if no typo was present
     let hasError = false;
     let activeCorrect = 0;
-    for (let i = 0; i < typedChars.length; i++) {
-      if (i < currentWord.length && typedChars[i] === currentWord[i]) {
+    for (let i = 0; i < state.typedChars.length; i++) {
+      if (i < currentWord.length && state.typedChars[i] === currentWord[i]) {
         if (!hasError) activeCorrect++;
       } else {
         hasError = true;
@@ -357,16 +315,16 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
     }
 
     let finalRawChars = 0;
-    for (const item of history) {
+    for (const item of state.history) {
       finalRawChars += item.typed.length + 1;
     }
-    finalRawChars += typedChars.length;
+    finalRawChars += state.typedChars.length;
 
     const finalWpm = Math.max(0, Math.round((finalNetCorrectChars / 5) / testMinutes));
     const finalRawWpm = Math.max(0, Math.round((finalRawChars / 5) / testMinutes));
 
-    const totalKeys = correctKeystrokes + incorrectKeystrokes;
-    const finalAcc = totalKeys > 0 ? Math.round((correctKeystrokes / totalKeys) * 100) : 100;
+    const totalKeys = state.correctKeystrokes + state.incorrectKeystrokes;
+    const finalAcc = totalKeys > 0 ? Math.round((state.correctKeystrokes / totalKeys) * 100) : 100;
 
     // Monkeytype Consistency formula: 100 * (1 - (StandardDeviation / Mean))
     let finalConsistency = 100;
@@ -393,7 +351,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
       wpm: finalWpm,
       rawWpm: finalRawWpm,
       accuracy: finalAcc,
-      duration,
+      duration: state.duration,
       soundProfile: soundEngine.getProfile(),
     });
 
@@ -402,11 +360,89 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
         wpm: finalWpm,
         rawWpm: finalRawWpm,
         accuracy: finalAcc,
-        duration,
-        mode: `Speed Sprint (${duration}s)`,
+        duration: state.duration,
+        mode: `Speed Sprint (${state.duration}s)`,
       });
     }
-  };
+  }, [onTestComplete]);
+
+  // Main countdown timer & live telemetry tick (Independent of typing events)
+  useEffect(() => {
+    if (!isActive) return;
+
+    const testDuration = duration;
+    const startMs = startTimeRef.current || performance.now();
+    if (!startTimeRef.current) {
+      startTimeRef.current = startMs;
+    }
+
+    let lastSampleSec = -1;
+
+    // Tick every 100ms for continuous, millisecond-accurate countdown with zero drift
+    timerRef.current = setInterval(() => {
+      const now = performance.now();
+      const elapsedSec = (now - startMs) / 1000;
+      const remainingSec = Math.max(0, testDuration - elapsedSec);
+
+      setElapsedMs(Math.round(elapsedSec * 1000));
+      setTimeLeft(Math.ceil(remainingSec));
+
+      // Record second-by-second Raw WPM sample once every second
+      const currentSecFloor = Math.floor(elapsedSec);
+      if (currentSecFloor > lastSampleSec) {
+        lastSampleSec = currentSecFloor;
+        const state = latestStateRef.current;
+        const currentWord = state.words[state.currentWordIdx] || '';
+        const metrics = calculateMonkeytypeMetrics(
+          state.history,
+          state.typedChars,
+          currentWord,
+          elapsedSec,
+          state.correctKeystrokes,
+          state.incorrectKeystrokes
+        );
+
+        setWpm(metrics.wpm);
+        setRawWpm(metrics.rawWpm);
+        setAccuracy(metrics.accuracy);
+        setNetCorrectChars(metrics.netCorrectChars);
+        setTotalRawChars(metrics.totalRawChars);
+        rawWpmHistoryRef.current.push(metrics.rawWpm);
+
+        if (onLiveWpmUpdate) {
+          onLiveWpmUpdate(metrics.wpm, state.streak);
+        }
+        if (onWpmUpdate) {
+          const kps = Number((metrics.rawWpm / 12).toFixed(1));
+          onWpmUpdate(metrics.wpm, kps);
+        }
+      }
+
+      if (remainingSec <= 0) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        finishTest();
+      }
+    }, 100);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [isActive, duration, calculateMonkeytypeMetrics, finishTest, onLiveWpmUpdate, onWpmUpdate]);
+
+  // Caret coordinate reporting for particle bursts
+  useEffect(() => {
+    if (activeCharSpanRef.current && onCaretPositionUpdate) {
+      const rect = activeCharSpanRef.current.getBoundingClientRect();
+      onCaretPositionUpdate({
+        x: rect.right,
+        y: rect.top + rect.height / 2,
+      });
+    }
+  }, [typedChars, currentWordIdx, onCaretPositionUpdate]);
 
   /**
    * Keystroke event handler
@@ -683,6 +719,19 @@ export const SpeedSprintMode: React.FC<SpeedSprintModeProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Ghost Pacer (Personal Best Racing) */}
+      {isActive && (
+        <div className="w-full mb-3">
+          <GhostRacer
+            enabled={isActive}
+            targetWpm={bestRun}
+            elapsedTimeMs={elapsedMs}
+            totalChars={words.slice(0, 40).join(' ').length}
+            activeCharIdx={totalRawChars}
+          />
+        </div>
+      )}
 
       {/* Main Words Flow Container */}
       <div
