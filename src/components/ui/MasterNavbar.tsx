@@ -5,14 +5,13 @@ import { lofiRhythmEngine } from '../../audio/LofiRhythmEngine';
 import { useTheme } from '../../context/ThemeContext';
 import {
   Volume2,
-  VolumeX,
   Music,
   Tv,
-  Settings,
+  Sliders,
   Activity,
   Search,
-  Sparkles,
   Keyboard as KeyboardIcon,
+  Sparkles,
 } from 'lucide-react';
 
 export type GameMode =
@@ -39,14 +38,13 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
   onOpenHeatmap,
   onOpenAutopsy,
 }) => {
-  const { themeConfig, theme, setTheme, scanlinesEnabled, toggleScanlines, volume, setVolume } = useTheme();
+  const { themeConfig, toggleScanlines, scanlinesEnabled } = useTheme();
   const [currentProfile, setCurrentProfile] = useState<SoundProfileId>(() => soundEngine.getProfile());
   const [isLofiActive, setIsLofiActive] = useState<boolean>(() => lofiRhythmEngine.isEnabled());
 
   const handleProfileChange = (id: SoundProfileId) => {
     setCurrentProfile(id);
     soundEngine.setProfile(id);
-    // Preview sound
     soundEngine.triggerKeystroke({
       key: 'a',
       code: 'KeyA',
@@ -55,87 +53,94 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
   };
 
   const handleToggleLofi = () => {
-    const nextState = lofiRhythmEngine.toggle();
-    setIsLofiActive(nextState);
+    const next = lofiRhythmEngine.toggle();
+    setIsLofiActive(next);
   };
 
-  const modes: { id: GameMode; label: string; icon: string }[] = [
-    { id: 'speed_sprint', label: 'Speed Sprint', icon: '⚡' },
-    { id: 'code_sprint', label: 'Code Sprint', icon: '💻' },
-    { id: 'boss_battle', label: 'Boss Battle', icon: '🐉' },
-    { id: 'zen_typewriter', label: 'Zen ASMR', icon: '📜' },
-    { id: 'blindfold', label: 'Blindfold', icon: '🙈' },
-    { id: 'sudden_death', label: 'Hardcore', icon: '💀' },
-    { id: 'mechanical_duel', label: '1v1 Duel', icon: '⚔️' },
+  const modes: { id: GameMode; label: string; tag: string }[] = [
+    { id: 'speed_sprint', label: 'Speed Sprint', tag: '01' },
+    { id: 'code_sprint', label: 'Code Sprint', tag: '02' },
+    { id: 'boss_battle', label: 'Boss Battle', tag: '03' },
+    { id: 'zen_typewriter', label: 'Zen ASMR', tag: '04' },
+    { id: 'blindfold', label: 'Blindfold', tag: '05' },
+    { id: 'sudden_death', label: 'Hardcore', tag: '06' },
+    { id: 'mechanical_duel', label: '1v1 Duel', tag: '07' },
   ];
 
   return (
-    <header className="w-full border-b border-white/5 backdrop-blur-md sticky top-0 z-40 bg-slate-950/80">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
-        {/* Brand Logo */}
+    <header
+      className="w-full border-b sticky top-0 z-40 transition-colors backdrop-blur-md"
+      style={{
+        backgroundColor: `${themeConfig.surface}f5`,
+        borderColor: themeConfig.border,
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        {/* Left: ChainGPT Labs / Stols inspired Brand Monogram */}
         <div className="flex items-center gap-3">
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center font-mono font-black text-lg border shadow-lg"
-            style={{
-              backgroundColor: themeConfig.surface,
-              borderColor: themeConfig.accent,
-              color: themeConfig.accent,
-              boxShadow: `0 0 15px ${themeConfig.glow}`,
-            }}
-          >
-            M
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono font-extrabold text-base tracking-wider text-slate-100">
+          <div className="flex items-center gap-2 p-1.5 px-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 shadow-sm">
+            {/* Robot / Terminal Face Monogram */}
+            <div className="w-5 h-5 rounded bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-bold text-[10px]">
+              ::
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="font-extrabold tracking-wider text-[11px] font-display-chamfer">
                 MECHTYPE
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
-                v2.0 KINETIC
+              <span className="text-[8px] tracking-widest text-neutral-500 font-bold uppercase">
+                LABS // 2024
               </span>
             </div>
-            <div className="text-[10px] font-mono text-slate-400">
-              ASMR Mechanical Keyboard & Rhythm Engine
-            </div>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-1.5 text-neutral-400 pl-2 border-l border-neutral-300 dark:border-neutral-800">
+            <span>←</span>
+            <span className="hover:text-neutral-700 dark:hover:text-neutral-200 cursor-pointer">
+              Sensory Lab
+            </span>
           </div>
         </div>
 
-        {/* Game Mode Tabs */}
-        <nav className="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/5 overflow-x-auto max-w-full">
-          {modes.map((m) => (
-            <button
-              key={m.id}
-              onClick={() => onSelectMode(m.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                activeMode === m.id
-                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
-              }`}
-            >
-              <span>{m.icon}</span>
-              <span>{m.label}</span>
-            </button>
-          ))}
+        {/* Center: Mode Tabs inspired by [ Portfolio ] Blog :: Our Ecosystem */}
+        <nav className="flex items-center gap-1 overflow-x-auto max-w-full py-1">
+          {modes.map((m) => {
+            const isActive = activeMode === m.id;
+            return (
+              <button
+                key={m.id}
+                onClick={() => onSelectMode(m.id)}
+                className={`px-2.5 py-1 rounded transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                  isActive
+                    ? 'font-bold bg-neutral-900 text-white dark:bg-white dark:text-black shadow-sm'
+                    : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
+                }`}
+              >
+                {isActive && <span className="text-[#ff5500]">┌</span>}
+                <span>{m.label}</span>
+                {isActive && <span className="text-[#ff5500]">┘</span>}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Global Toolbar Controls */}
-        <div className="flex items-center gap-2.5">
-          {/* Soundpack Selector */}
-          <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/5">
-            <KeyboardIcon className="w-3.5 h-3.5 text-cyan-400" />
+        {/* Right: Technical Controls & Orange "Apply Now" style Action */}
+        <div className="flex items-center gap-2">
+          {/* Switch Selector Pill */}
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
+            <KeyboardIcon className="w-3.5 h-3.5 text-neutral-500" />
             <select
               value={currentProfile}
               onChange={(e) => handleProfileChange(e.target.value as SoundProfileId)}
-              className="bg-transparent text-xs font-mono text-cyan-300 focus:outline-none cursor-pointer max-w-[140px] truncate"
+              className="bg-transparent text-[11px] font-mono font-bold text-neutral-800 dark:text-neutral-200 focus:outline-none cursor-pointer max-w-[130px] truncate"
             >
-              <optgroup label="Mechanical Switches" className="bg-slate-900 text-slate-200">
+              <optgroup label="Mechanical Switches">
                 {SOUND_PROFILES.filter((p) => p.category === 'mechanical').map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>
                 ))}
               </optgroup>
-              <optgroup label="Bonus Soundpacks" className="bg-slate-900 text-slate-200">
+              <optgroup label="Bonus Soundpacks">
                 {SOUND_PROFILES.filter((p) => p.category === 'bonus').map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -145,58 +150,45 @@ export const MasterNavbar: React.FC<MasterNavbarProps> = ({
             </select>
           </div>
 
-          {/* Lo-Fi Rhythm Sync Toggle */}
+          {/* Lo-Fi Rhythm Harmonizer Sync */}
           <button
             onClick={handleToggleLofi}
-            className={`px-2.5 py-1 rounded-lg text-xs font-mono flex items-center gap-1.5 border transition-all ${
+            className={`px-2 py-1 rounded border transition-colors flex items-center gap-1 text-[11px] ${
               isLofiActive
-                ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-md shadow-purple-950/40 animate-pulse'
-                : 'bg-black/30 text-slate-400 border-white/5 hover:text-slate-200'
+                ? 'bg-[#ff5500]/10 border-[#ff5500] text-[#ff5500] font-bold'
+                : 'border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100'
             }`}
-            title="Toggle Lo-Fi Ambient Harmonizer Beat"
+            title="Toggle Ambient Lo-Fi Melodic Harmonizer"
           >
             <Music className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Lo-Fi Beat</span>
+            <span className="hidden md:inline">Lo-Fi</span>
           </button>
 
-          {/* CRT Scanline Toggle */}
-          <button
-            onClick={toggleScanlines}
-            className={`p-1.5 rounded-lg border transition-colors ${
-              scanlinesEnabled
-                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                : 'bg-black/30 text-slate-400 border-white/5 hover:text-slate-200'
-            }`}
-            title="Toggle CRT Retro Scanline Overlay"
-          >
-            <Tv className="w-4 h-4" />
-          </button>
-
-          {/* Ergonomic Heatmap Button */}
+          {/* 10-Finger Heatmap */}
           <button
             onClick={onOpenHeatmap}
-            className="p-1.5 rounded-lg bg-black/30 text-slate-400 border border-white/5 hover:text-cyan-300 transition-colors"
-            title="10-Finger Heatmap & Ergonomics"
+            className="p-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 text-neutral-600 dark:text-neutral-300"
+            title="10-Finger Ergonomic Heatmap"
           >
-            <Activity className="w-4 h-4" />
+            <Activity className="w-3.5 h-3.5" />
           </button>
 
-          {/* Typo Autopsy Button */}
+          {/* Typo Autopsy */}
           <button
             onClick={onOpenAutopsy}
-            className="p-1.5 rounded-lg bg-black/30 text-slate-400 border border-white/5 hover:text-rose-300 transition-colors"
+            className="p-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 text-neutral-600 dark:text-neutral-300"
             title="Slow-Mo Typo Autopsy"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-3.5 h-3.5" />
           </button>
 
-          {/* Settings Drawer Button */}
+          {/* High-Impact Orange Pill Button (Inspired by APPLY NOW / APPLY FOR INCUBATION) */}
           <button
             onClick={onOpenSettings}
-            className="p-1.5 rounded-lg bg-black/30 text-slate-400 border border-white/5 hover:text-cyan-300 transition-colors"
-            title="Acoustic Settings & Calibration"
+            className="btn-orange-pill px-3 py-1.5 rounded font-mono font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
           >
-            <Settings className="w-4 h-4" />
+            <Sliders className="w-3.5 h-3.5" />
+            <span>CALIBRATE</span>
           </button>
         </div>
       </div>

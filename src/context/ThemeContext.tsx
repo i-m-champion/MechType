@@ -16,7 +16,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<KeycapTheme>(() => {
     const saved = localStorage.getItem('mechtype_theme');
-    return (saved as KeycapTheme) || 'cyberpunk';
+    return (saved as KeycapTheme) || 'industrial';
   });
 
   const [scanlinesEnabled, setScanlinesEnabled] = useState<boolean>(() => {

@@ -1,4 +1,4 @@
-export type KeycapTheme = 'cyberpunk' | 'retro1984' | 'nordic' | 'crt';
+export type KeycapTheme = 'industrial' | 'cyberpunk' | 'retro1984' | 'nordic' | 'crt';
 
 export interface ThemeColors {
   id: KeycapTheme;
@@ -20,9 +20,32 @@ export interface ThemeColors {
   modKeyTop: string;
   glow: string;
   scanlines: boolean;
+  isLight?: boolean;
 }
 
 export const THEME_CONFIGS: Record<KeycapTheme, ThemeColors> = {
+  industrial: {
+    id: 'industrial',
+    name: 'Industrial Architectural',
+    subtitle: 'Technical wireframe grid with stark black typography & international orange',
+    bg: '#ebebed',
+    surface: '#ffffff',
+    panel: '#f4f4f7',
+    border: '#c8c8d0',
+    text: '#090a0d',
+    textMuted: '#686975',
+    accent: '#ff5500',
+    accentSecondary: '#ff2626',
+    keycapBase: '#cfcfd6',
+    keycapTop: '#ffffff',
+    keycapText: '#090a0d',
+    keycapActive: '#ff5500',
+    modKeyBase: '#bebec6',
+    modKeyTop: '#ececee',
+    glow: 'rgba(255, 85, 0, 0.25)',
+    scanlines: false,
+    isLight: true,
+  },
   cyberpunk: {
     id: 'cyberpunk',
     name: 'Cyberpunk Neon',

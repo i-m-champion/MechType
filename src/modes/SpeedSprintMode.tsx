@@ -260,11 +260,11 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
       {/* Test Controls Bar */}
-      <div className="flex items-center justify-between w-full mb-6 px-4 py-2 rounded-xl bg-slate-900/60 border border-white/5 backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between w-full mb-6 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-slate-900/60 border border-neutral-300 dark:border-white/5 backdrop-blur-md gap-3">
         {/* Time Selector */}
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-cyan-400" />
-          <span className="text-xs font-mono text-slate-400 uppercase">Duration:</span>
+          <Clock className="w-4 h-4 text-[#ff5500] dark:text-cyan-400" />
+          <span className="text-xs font-mono text-neutral-500 uppercase">Duration:</span>
           {[15, 30, 60, 120].map((t) => (
             <button
               key={t}
@@ -274,8 +274,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
               }}
               className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
                 duration === t
-                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-neutral-900 text-white dark:bg-cyan-500/20 dark:text-cyan-300 font-bold border border-neutral-900 dark:border-cyan-500/40 shadow-sm'
+                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-slate-200'
               }`}
             >
               {t}s
@@ -286,21 +286,21 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         {/* Live Metrics Display */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-slate-400 uppercase">Timer:</span>
-            <span className="text-lg font-mono font-black text-cyan-400">
+            <span className="text-xs font-mono text-neutral-500 uppercase">Timer:</span>
+            <span className="text-lg font-mono font-black text-neutral-900 dark:text-cyan-400">
               {timeLeft}s
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-slate-400 uppercase">WPM:</span>
+            <span className="text-xs font-mono text-neutral-500 uppercase">WPM:</span>
             <span
               className={`text-lg font-mono font-black transition-colors ${
                 currentTier === 'overdrive'
-                  ? 'text-cyan-300 animate-pulse'
+                  ? 'text-[#ff5500] dark:text-cyan-300 animate-pulse'
                   : currentTier === 'combustion'
-                  ? 'text-orange-400'
-                  : 'text-slate-100'
+                  ? 'text-orange-500'
+                  : 'text-neutral-900 dark:text-slate-100'
               }`}
             >
               {wpm}
@@ -308,8 +308,8 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-slate-400 uppercase">Acc:</span>
-            <span className="text-lg font-mono font-black text-emerald-400">
+            <span className="text-xs font-mono text-neutral-500 uppercase">Acc:</span>
+            <span className="text-lg font-mono font-black text-emerald-600 dark:text-emerald-400">
               {correctChars + incorrectChars > 0
                 ? `${Math.round((correctChars / (correctChars + incorrectChars)) * 100)}%`
                 : '100%'}
@@ -318,7 +318,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
 
           <button
             onClick={() => resetTest()}
-            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-100 transition-colors"
+            className="p-1.5 rounded-lg bg-white dark:bg-white/5 border border-neutral-200 dark:border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-slate-100 transition-colors shadow-sm"
             title="Restart Test (Tab + Enter)"
           >
             <RotateCcw className="w-4 h-4" />
@@ -330,7 +330,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
       <div
         ref={containerRef}
         onClick={() => inputRef.current?.focus()}
-        className="w-full min-h-[160px] p-6 rounded-2xl bg-slate-900/40 border border-white/5 relative cursor-text overflow-hidden select-none"
+        className="w-full min-h-[170px] p-6 sm:p-8 rounded-2xl bg-neutral-50 dark:bg-slate-900/40 border border-neutral-300 dark:border-white/5 relative cursor-text overflow-hidden select-none shadow-sm"
       >
         {/* Hidden Input for Touch & Focus */}
         <input
@@ -345,7 +345,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         />
 
         {/* Word Display Stream */}
-        <div className="flex flex-wrap gap-x-2.5 gap-y-3 font-mono text-xl sm:text-2xl leading-relaxed tracking-wide">
+        <div className="flex flex-wrap gap-x-3 gap-y-3.5 font-mono text-2xl sm:text-3xl leading-relaxed tracking-normal">
           {words.slice(Math.max(0, currentWordIdx - 4), currentWordIdx + 25).map((word, relIdx) => {
             const actualIdx = Math.max(0, currentWordIdx - 4) + relIdx;
             const isCurrent = actualIdx === currentWordIdx;
@@ -357,7 +357,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                 <span
                   key={actualIdx}
                   className={`transition-colors ${
-                    historyItem.isCorrect ? 'text-slate-500' : 'text-rose-500/80 underline decoration-rose-500'
+                    historyItem.isCorrect ? 'text-neutral-400 dark:text-slate-600' : 'text-rose-600 dark:text-rose-500/80 underline decoration-rose-500'
                   }`}
                 >
                   {historyItem.typed}
@@ -373,11 +373,11 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                 >
                   {word.split('').map((char, charIdx) => {
                     const typedChar = typedChars[charIdx];
-                    let charColor = 'text-slate-400';
+                    let charColor = 'text-neutral-800 dark:text-slate-300 font-medium';
                     let isCaretHere = charIdx === typedChars.length;
 
                     if (typedChar !== undefined) {
-                      charColor = typedChar === char ? 'text-cyan-300 font-bold' : 'text-rose-400 bg-rose-500/20 rounded';
+                      charColor = typedChar === char ? 'text-[#ff5500] dark:text-cyan-300 font-bold' : 'text-rose-600 dark:text-rose-400 bg-rose-500/20 rounded';
                     }
 
                     return (
@@ -388,8 +388,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                       >
                         {isCaretHere && (
                           <span
-                            className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse"
-                            style={{ backgroundColor: themeConfig.accent }}
+                            className="absolute -left-0.5 top-0 bottom-0 w-0.5 animate-pulse bg-[#ff5500] dark:bg-cyan-400"
                           />
                         )}
                         {char}
@@ -400,7 +399,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                   {/* Trailing extra typos typed beyond word length */}
                   {typedChars.length > word.length &&
                     typedChars.slice(word.length).split('').map((extraChar, extraIdx) => (
-                      <span key={`extra-${extraIdx}`} className="text-rose-500 bg-rose-950/40 rounded">
+                      <span key={`extra-${extraIdx}`} className="text-rose-600 bg-rose-500/20 rounded">
                         {extraChar}
                       </span>
                     ))}
@@ -409,8 +408,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
                   {typedChars.length >= word.length && (
                     <span
                       ref={activeCharSpanRef}
-                      className="w-0.5 h-6 animate-pulse inline-block align-middle ml-0.5"
-                      style={{ backgroundColor: themeConfig.accent }}
+                      className="w-0.5 h-7 animate-pulse inline-block align-middle ml-0.5 bg-[#ff5500] dark:bg-cyan-400"
                     />
                   )}
                 </span>
@@ -418,7 +416,7 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
             }
 
             return (
-              <span key={actualIdx} className="text-slate-600 transition-colors">
+              <span key={actualIdx} className="text-neutral-400 dark:text-slate-600 transition-colors">
                 {word}
               </span>
             );
@@ -426,9 +424,9 @@ export const SpeedSprintMode: React.FC<SpeedSprintProps> = ({
         </div>
 
         {!isActive && !isFinished && (
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] flex items-center justify-center pointer-events-none">
-            <span className="text-xs font-mono text-cyan-400/80 uppercase tracking-widest animate-pulse">
-              Click or Press Any Key to Start
+          <div className="absolute inset-0 bg-neutral-100/40 dark:bg-black/20 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+            <span className="text-xs font-mono text-neutral-600 dark:text-cyan-400/80 font-bold uppercase tracking-widest animate-pulse px-3 py-1.5 rounded-lg bg-white/80 dark:bg-black/60 border border-neutral-200 dark:border-white/10 shadow-sm">
+              CLICK OR PRESS ANY KEY TO INITIALIZE SPRINT
             </span>
           </div>
         )}

@@ -262,17 +262,18 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
           </div>
 
           {/* Keycap Theme Switcher */}
-          <div className="flex items-center gap-1 bg-black/30 p-1 rounded-lg border border-white/5">
-            <span className="text-[10px] font-mono text-slate-400 px-1">Theme:</span>
+          <div className="flex items-center gap-1 bg-black/5 dark:bg-black/30 p-1 rounded-lg border border-neutral-300 dark:border-white/5">
+            <span className="text-[10px] font-mono text-neutral-500 px-1">Theme:</span>
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value as any)}
-              className="bg-transparent text-[11px] font-mono text-cyan-400 focus:outline-none cursor-pointer"
+              className="bg-transparent text-[11px] font-mono font-bold text-[#ff5500] dark:text-cyan-400 focus:outline-none cursor-pointer"
             >
-              <option value="cyberpunk" className="bg-slate-900 text-slate-200">Cyberpunk Neon</option>
-              <option value="retro1984" className="bg-slate-900 text-slate-200">Retro 1984 Beige</option>
-              <option value="nordic" className="bg-slate-900 text-slate-200">Nordic Minimal Slate</option>
-              <option value="crt" className="bg-slate-900 text-slate-200">CRT Phosphor Green</option>
+              <option value="industrial" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Industrial Wireframe</option>
+              <option value="cyberpunk" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Cyberpunk Neon</option>
+              <option value="retro1984" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Retro 1984 Beige</option>
+              <option value="nordic" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">Nordic Minimal Slate</option>
+              <option value="crt" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">CRT Phosphor Green</option>
             </select>
           </div>
         </div>
@@ -352,7 +353,7 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
                     style={{
                       backgroundColor: isPressed ? themeConfig.keycapActive : topBg,
                       color: isPressed
-                        ? '#000000'
+                        ? (themeConfig.isLight ? '#ffffff' : '#000000')
                         : isWeak
                         ? '#f43f5e'
                         : themeConfig.keycapText,
@@ -360,11 +361,15 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
                         ? '#f43f5e'
                         : isPressed
                         ? themeConfig.accent
+                        : themeConfig.isLight
+                        ? 'rgba(0,0,0,0.12)'
                         : 'rgba(255,255,255,0.06)',
                       boxShadow: isWeak
                         ? `0 0 12px rgba(244, 63, 94, 0.8)`
                         : isPressed
                         ? `0 0 16px ${themeConfig.accent}`
+                        : themeConfig.isLight
+                        ? 'inset 0 1px 1px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.06)'
                         : 'inset 0 1px 1px rgba(255,255,255,0.15)',
                     }}
                   >

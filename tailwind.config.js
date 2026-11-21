@@ -22,9 +22,10 @@ export default {
         }
       },
       fontFamily: {
-        mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
-        display: ['"Space Grotesk"', '"Syne"', 'sans-serif'],
+        mono: ['"Space Mono"', '"JetBrains Mono"', 'monospace'],
+        display: ['"Chakra Petch"', '"Space Grotesk"', 'sans-serif'],
         arcade: ['"Press Start 2P"', 'monospace'],
+        tech: ['"Chakra Petch"', 'sans-serif'],
       },
       animation: {
         'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
