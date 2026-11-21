@@ -4,6 +4,8 @@ import { KeyDefinition } from '../../types/keyboard';
 import { useTheme } from '../../context/ThemeContext';
 import { soundEngine } from '../../audio/SoundEngine';
 import { lofiRhythmEngine } from '../../audio/LofiRhythmEngine';
+import { RgbRippleOverlay } from './RgbRippleOverlay';
+import { RgbMode, RgbWave } from '../../types/rgb';
 
 interface KeyState {
   isPressed: boolean;
@@ -24,11 +26,39 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
   weakKeys = new Set(),
   problemKeyStats = {},
 }) => {
-  const { themeConfig, theme } = useTheme();
+  const { themeConfig, theme, setTheme } = useTheme();
   const [pressedCodes, setPressedCodes] = useState<Set<string>>(new Set());
+  const [rgbMode, setRgbMode] = useState<RgbMode>('rainbow');
+  const [waves, setWaves] = useState<RgbWave[]>([]);
+  const waveIdRef = useRef(0);
   const keyStatesRef = useRef<Record<string, KeyState>>({});
   const [, setRenderTrigger] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const spawnRgbWave = useCallback((row: number, col: number, keyWidth: number) => {
+    if (rgbMode === 'off') return;
+    const waveId = ++waveIdRef.current;
+    // Estimate coordinates based on row and col (normalized 0..100)
+    const yPercent = (row / 5) * 100 + 10;
+    const xPercent = Math.min(100, Math.max(0, (col / 14) * 100 + 4));
+
+    const newWave: RgbWave = {
+      id: waveId,
+      originRow: row,
+      originCol: col,
+      originX: xPercent,
+      originY: yPercent,
+      startTime: performance.now(),
+      duration: 650,
+      color: themeConfig.accent,
+    };
+
+    setWaves((prev) => [...prev.slice(-12), newWave]);
+  }, [rgbMode, themeConfig.accent]);
+
+  const handleWaveComplete = useCallback((id: number) => {
+    setWaves((prev) => prev.filter((w) => w.id !== id));
+  }, []);
 
   // Initialize key states
   useEffect(() => {
@@ -109,6 +139,15 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
         keyState.lastPressedTime = performance.now();
         keyState.rippleIntensity = 1.0;
         setPressedCodes((prev) => new Set(prev).add(code));
+
+        // Find key row/col for RGB wave
+        for (const r of ANSI_KEYBOARD_LAYOUT) {
+          const found = r.find((k) => k.code === code);
+          if (found) {
+            spawnRgbWave(found.row, found.col, found.width);
+            break;
+          }
+        }
       }
     };
 
@@ -140,6 +179,7 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
       keyState.lastPressedTime = performance.now();
       keyState.rippleIntensity = 1.0;
       setPressedCodes((prev) => new Set(prev).add(key.code));
+      spawnRgbWave(key.row, key.col, key.width);
     }
 
     // Trigger audio
@@ -193,33 +233,65 @@ export const IsometricKeyboardVisualizer: React.FC<IsometricKeyboardProps> = ({
       }}
     >
       {/* Visualizer Header */}
-      <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/5 px-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 mb-2 border-b border-white/5 px-2">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full animate-ping" style={{ backgroundColor: themeConfig.accent }} />
           <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
-            60% ISO-SPRING VISUALIZER // {themeConfig.name}
+            60% ISO-SPRING VISUALIZER
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-sm bg-rose-500/80 inline-block" />
-            Weak Finger Key
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-sm inline-block" style={{ backgroundColor: themeConfig.accent }} />
-            Active Plunge
-          </span>
+
+        {/* Controls: RGB Waves & Themes */}
+        <div className="flex items-center gap-3">
+          {/* RGB Mode Selector */}
+          <div className="flex items-center gap-1 bg-black/30 p-1 rounded-lg border border-white/5">
+            <span className="text-[10px] font-mono text-slate-400 px-1">RGB:</span>
+            {(['rainbow', 'neon', 'matrix', 'starlight', 'off'] as RgbMode[]).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setRgbMode(mode)}
+                className={`px-1.5 py-0.5 text-[10px] font-mono uppercase rounded transition-colors ${
+                  rgbMode === mode
+                    ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
+
+          {/* Keycap Theme Switcher */}
+          <div className="flex items-center gap-1 bg-black/30 p-1 rounded-lg border border-white/5">
+            <span className="text-[10px] font-mono text-slate-400 px-1">Theme:</span>
+            <select
+              value={theme}
+              onChange={(e) => setTheme(e.target.value as any)}
+              className="bg-transparent text-[11px] font-mono text-cyan-400 focus:outline-none cursor-pointer"
+            >
+              <option value="cyberpunk" className="bg-slate-900 text-slate-200">Cyberpunk Neon</option>
+              <option value="retro1984" className="bg-slate-900 text-slate-200">Retro 1984 Beige</option>
+              <option value="nordic" className="bg-slate-900 text-slate-200">Nordic Minimal Slate</option>
+              <option value="crt" className="bg-slate-900 text-slate-200">CRT Phosphor Green</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Keyboard Bed */}
       <div
-        className="p-3 rounded-xl flex flex-col gap-1.5 overflow-hidden"
+        className="p-3 rounded-xl flex flex-col gap-1.5 overflow-hidden relative"
         style={{
           backgroundColor: themeConfig.panel,
           perspective: '1000px',
         }}
       >
+        {/* Dynamic RGB Reactive Ripple Layer */}
+        <RgbRippleOverlay
+          mode={rgbMode}
+          waves={waves}
+          onWaveComplete={handleWaveComplete}
+        />
         {ANSI_KEYBOARD_LAYOUT.map((row, rowIndex) => (
           <div key={rowIndex} className="flex gap-1.5 justify-center w-full">
             {row.map((key) => {
