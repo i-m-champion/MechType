@@ -1,45 +1,81 @@
-# MECH_TYPE ⌨️⚡
-> **The Ultimate Mechanical Keyboard Typing Trainer, ASMR Sound Engine, and Arcade Rhythm Game.**
+<div align="center">
 
-[![React 18](https://img.shields.io/badge/React-18.3-61dafb.svg?style=flat-square&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646cff.svg?style=flat-square&logo=vite)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8.svg?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![Web Audio API](https://img.shields.io/badge/Web_Audio_API-Native_Synthesis-ff5500.svg?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-[![Latency](https://img.shields.io/badge/Audio_Latency-0ms_Procedural-10b981.svg?style=flat-square)](https://github.com/i-m-champion/MechType)
-[![Design](https://img.shields.io/badge/Design-Swiss_Architectural_Grid-000000.svg?style=flat-square)](https://github.com/i-m-champion/MechType)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+```text
+  __  __ _____ ____ _   _ _____ _   _ ____  _____ 
+ |  \/  | ____/ ___| | | |_   _| | | |  _ \| ____|
+ | |\/| |  _|| |   | |_| | | | | |_| | |_) |  _|  
+ | |  | | |__| |___|  _  | | |  \__, |  __/| |___ 
+ |_|  |_|_____\____|_| |_| |_|    |_/|_|   |_____|
+           // SENSORY LAB • 2024 //
+```
+
+# ⌨️ `M E C H _ T Y P E`
+### **The Sensory Mechanical Keyboard Typing Trainer, ASMR Sound Engine & Arcade Rhythm Game**
+
+<p align="center">
+  <em>The reinvention of human muscle memory and touch-typing benchmarking through tactile acoustic feedback.</em>
+</p>
+
+<!-- Sleek for-the-badge badges with color-coded branding -->
+<p align="center">
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/REACT-18.3-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 18" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TYPESCRIPT-5.5-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5" /></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/VITE-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 6" /></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/TAILWIND_CSS-3.4-38BDF8?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" /></a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"><img src="https://img.shields.io/badge/AUDIO_LATENCY-0ms_NATIVE-FF5500?style=for-the-badge&logo=web-audio&logoColor=white" alt="Web Audio API" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/BENCHMARK-MONKEYTYPE_EXACT-10B981?style=for-the-badge" alt="Monkeytype Accuracy" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/UI_THEME-SWISS_ARCHITECTURAL-F59E0B?style=for-the-badge" alt="Swiss UI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-0284C7?style=for-the-badge" alt="MIT License" /></a>
+</p>
+
+<p align="center">
+  <a href="#-12--quickstart--local-setup"><b>⚡ Quickstart</b></a> •
+  <a href="#-01--visual-tour--architectural-interface"><b>🖼️ Visual Tour</b></a> •
+  <a href="#-02--zero-latency-asmr-switch-engine"><b>🔊 Switch Acoustics</b></a> •
+  <a href="#-03--official-monkeytype-benchmark-engine"><b>🎯 Benchmark Engine</b></a> •
+  <a href="#-04--7-comprehensive-game-modes"><b>🕹️ 7 Game Modes</b></a> •
+  <a href="#-08--1v1-multiplayer-duel--3d-spatial-audio"><b>⚔️ 1v1 Spatial Duels</b></a>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/01-hero-masthead.png" alt="MechType Hero Masthead" width="100%" style="border-radius: 12px; border: 1px solid #e5e5e5; box-shadow: 0 12px 40px rgba(0,0,0,0.07);" />
+</p>
+
+</div>
 
 ---
 
-## 📑 Table of Contents
-1. [Project Overview](#-project-overview)
-2. [Visual Tour & Architectural Interface](#-visual-tour--architectural-interface)
-3. [Zero-Latency ASMR Switch Engine](#-zero-latency-asmr-switch-engine)
-4. [Official Monkeytype-Accurate Calculation Engine](#-official-monkeytype-accurate-calculation-engine)
-5. [7 Comprehensive Game Modes](#-7-comprehensive-game-modes)
-6. [Interactive 3D / Isometric Keycap Visualizer](#-interactive-3d--isometric-keycap-visualizer)
-7. [The Dynamic Overdrive Combo Engine](#-the-dynamic-overdrive-combo-engine)
-8. [Smart Ergonomic Coaching & Analytics Suite](#-smart-ergonomic-coaching--analytics-suite)
-9. [1v1 Multiplayer Duel & 3D Spatial Audio](#-1v1-multiplayer-duel--3d-spatial-audio)
-10. [Colorway & Theme Customization](#-colorway--theme-customization)
-11. [Keyboard Shortcuts & Hotkeys](#-keyboard-shortcuts--hotkeys)
-12. [Technical Architecture & Project Structure](#-technical-architecture--project-structure)
-13. [Getting Started & Local Setup](#-getting-started--local-setup)
+## 📑 TABLE OF CONTENTS
+1. [👁️ Project Overview](#%EF%B8%8F-project-overview)
+2. [┌ 01 ┘ 🖼️ Visual Tour & Architectural Interface](#-01---visual-tour--architectural-interface)
+3. [┌ 02 ┘ 🔊 Zero-Latency ASMR Switch Engine](#-02---zero-latency-asmr-switch-engine)
+4. [┌ 03 ┘ 🎯 Official Monkeytype Benchmark Engine](#-03---official-monkeytype-benchmark-engine)
+5. [┌ 04 ┘ 🕹️ 7 Comprehensive Game Modes](#-04---7-comprehensive-game-modes)
+6. [┌ 05 ┘ ⌨️ 60% ISO Physical Keyboard Visualizer](#-05---60-iso-physical-keyboard-visualizer)
+7. [┌ 06 ┘ ⚡ The Dynamic Overdrive Combo Engine](#-06---the-dynamic-overdrive-combo-engine)
+8. [┌ 07 ┘ 🩺 Smart Ergonomic Coaching & Analytics Suite](#-07---smart-ergonomic-coaching--analytics-suite)
+9. [┌ 08 ┘ ⚔️ 1v1 Multiplayer Duel & 3D Spatial Audio](#-08---1v1-multiplayer-duel--3d-spatial-audio)
+10. [┌ 09 ┘ 🎨 Colorway & Architectural Theme System](#-09---colorway--architectural-theme-system)
+11. [┌ 10 ┘ ⌨️ Keyboard Shortcuts & Hotkeys](#-10---keyboard-shortcuts--hotkeys)
+12. [┌ 11 ┘ 🛠️ System Architecture & Codebase Structure](#-11---system-architecture--codebase-structure)
+13. [┌ 12 ┘ 🚀 Quickstart & Local Setup](#-12---quickstart--local-setup)
 
 ---
 
-## 👁️ Project Overview
+## 👁️ PROJECT OVERVIEW
 
-**MechType** is a sensory-rich web application that merges **high-precision touch-typing benchmarking** with **authentic procedural mechanical keyboard acoustics**, **arcade rhythm mechanics**, and a **neo-brutalist Swiss architectural wireframe aesthetic** (inspired by *ChainGPT Labs* and *Synthopsis*).
+> **"Typing should not merely be data entry — it should be a tactile, auditory, and cognitive masterpiece."**
 
-Every keystroke is mathematically generated in real time using the browser's native **Web Audio API**—meaning zero audio file latency, zero MP3 lag, and organic micro-pitch variations that make typing feel like sitting at a custom-lubed mechanical board or an antique Underwood typewriter.
+**MechType** is a high-performance web workstation that unifies **high-precision touch-typing benchmarking** with **authentic procedural mechanical keyboard acoustics**, **arcade rhythm mechanics**, and a **neo-brutalist Swiss architectural wireframe aesthetic** (inspired by *ChainGPT Labs* and *Synthopsis*).
+
+Every keystroke is mathematically calculated and synthesized in real time via the native **Web Audio API**—yielding zero audio buffer latency, zero MP3 lag, and organic micro-pitch variations that make typing feel like sitting at a custom-lubed mechanical board or an antique Underwood typewriter.
 
 ---
 
-## 🖼️ Visual Tour & Architectural Interface
+## ┌ 01 ┘ 🖼️ VISUAL TOUR & ARCHITECTURAL INTERFACE
+> *Precision Swiss grid layout with technical crosshair markers (`+`), technical monospace typography, and interactive colorway switching.*
 
-### 1. Hero Masthead & Sensory Engine Hub
+### ┌ 01.1 ┘ Hero Masthead & Sensory Engine Hub
 The masthead features a Swiss modernist architectural layout with technical grid lines, precision crosshair markers (`+`), and an interactive UI Colorway Switcher.
 
 ![MechType Hero Masthead](docs/screenshots/01-hero-masthead.png)
@@ -47,7 +83,7 @@ The masthead features a Swiss modernist architectural layout with technical grid
 
 ---
 
-### 2. ISO-Spring 60% Physical Keyboard Visualizer
+### ┌ 01.2 ┘ ISO-Spring 60% Physical Keyboard Visualizer
 An interactive physical keyboard visualizer sits at the bottom of the screen. As you type, keys plunge with realistic mechanical spring physics, emit customizable RGB reactive lighting waves, and reflect weakness heatmap diagnostics.
 
 ![ISO-Spring Keyboard Visualizer](docs/screenshots/02-keyboard-visualizer.png)
@@ -55,7 +91,7 @@ An interactive physical keyboard visualizer sits at the bottom of the screen. As
 
 ---
 
-### 3. Boss Battle RPG Mode
+### ┌ 01.3 ┘ Retro Boss Battle RPG Mode
 Transform your typing speed and accuracy into offensive combat spells against legendary developer nemeses.
 
 ![Boss Battle RPG](docs/screenshots/03-boss-battle-rpg.png)
@@ -63,7 +99,7 @@ Transform your typing speed and accuracy into offensive combat spells against le
 
 ---
 
-### 4. 10-Finger Ergonomic Latency & Weakness Heatmap
+### ┌ 01.4 ┘ 10-Finger Ergonomic Latency & Weakness Heatmap
 Deep biometric diagnostic dashboard breaking down individual finger latency, stumbling keys, and error rates with one-click targeted practice drills.
 
 ![10-Finger Ergonomic Heatmap](docs/screenshots/04-ergonomic-heatmap.png)
@@ -71,7 +107,7 @@ Deep biometric diagnostic dashboard breaking down individual finger latency, stu
 
 ---
 
-### 5. 1v1 Mechanical Duel with 3D Spatial Audio
+### ┌ 01.5 ┘ 1v1 Mechanical Duel with 3D Spatial Audio
 Real-time peer-to-peer multiplayer racing powered by WebRTC. Hear your opponent's mechanical switches clacking live in your right ear in 3D stereo audio, or race against an offline AI Sparring Bot.
 
 ![1v1 Mechanical Duel](docs/screenshots/05-1v1-mechanical-duel.png)
@@ -79,7 +115,8 @@ Real-time peer-to-peer multiplayer racing powered by WebRTC. Hear your opponent'
 
 ---
 
-## 🔊 Zero-Latency ASMR Switch Engine
+## ┌ 02 ┘ 🔊 ZERO-LATENCY ASMR SWITCH ENGINE
+> *Zero audio sampling delays. 100% mathematical procedural synthesis using browser-native oscillators, biquad filters, and resonant convolvers.*
 
 Traditional typing trainers play back static MP3/WAV files that suffer from browser audio decoding delays and unnatural, repetitive sound. **MechType synthesizes all audio procedurally from scratch** using native `AudioContext` oscillators, white noise buffers, biquad filters, and resonant frequency envelopes.
 
@@ -106,7 +143,8 @@ Traditional typing trainers play back static MP3/WAV files that suffer from brow
 
 ---
 
-## 🎯 Official Monkeytype-Accurate Calculation Engine
+## ┌ 03 ┘ 🎯 OFFICIAL MONKEYTYPE BENCHMARK ENGINE
+> *Strict mathematical fidelity to the 5-character word standard, millisecond timing, and Net/Raw WPM validation.*
 
 MechType adheres strictly to the **official Monkeytype benchmarking specification**:
 
@@ -141,7 +179,8 @@ Uses `performance.now()` with sub-millisecond precision, completely decoupled fr
 
 ---
 
-## 🕹️ 7 Comprehensive Game Modes
+## ┌ 04 ┘ 🕹️ 7 COMPREHENSIVE GAME MODES
+> *From high-stakes competitive benchmarks to relaxing typewriter journals and arcade RPG battles.*
 
 MechType includes 7 dedicated game modes catering to benchmarking, programming, gaming, and relaxation:
 
@@ -157,7 +196,8 @@ MechType includes 7 dedicated game modes catering to benchmarking, programming, 
 
 ---
 
-## ⌨️ Interactive 3D / Isometric Keycap Visualizer
+## ┌ 05 ┘ ⌨️ 60% ISO PHYSICAL KEYBOARD VISUALIZER
+> *Physical spring plunge physics, customizable RGB wave ripple cascades, and live weak-finger heatmap aura.*
 
 Located in the bottom viewport, the virtual keyboard provides real-time visual feedback:
 
@@ -177,7 +217,8 @@ Located in the bottom viewport, the virtual keyboard provides real-time visual f
 
 ---
 
-## ⚡ The Dynamic Overdrive Combo Engine
+## ┌ 06 ┘ ⚡ THE DYNAMIC OVERDRIVE COMBO ENGINE
+> *Visual dopamine escalation: from calm caret glides to screen-shaking combustion and 100+ WPM chromatic aberration.*
 
 Inspired by high-energy arcade games, MechType features a progressive **Overdrive Tier Engine** that rewards speed and precision:
 
@@ -190,7 +231,8 @@ Inspired by high-energy arcade games, MechType features a progressive **Overdriv
 
 ---
 
-## 🩺 Smart Ergonomic Coaching & Analytics Suite
+## ┌ 07 ┘ 🩺 SMART ERGONOMIC COACHING & ANALYTICS SUITE
+> *Biometric diagnostics to eliminate finger hesitation, balance keystroke latency, and cure typing fatigue.*
 
 MechType is also an ergonomic diagnostic workstation designed to eliminate typing fatigue and hesitation:
 
@@ -220,7 +262,8 @@ Automatically logs all completed sessions with timestamps, WPM, accuracy, durati
 
 ---
 
-## ⚔️ 1v1 Multiplayer Duel & 3D Spatial Audio
+## ┌ 08 ┘ ⚔️ 1v1 MULTIPLAYER DUEL & 3D SPATIAL AUDIO
+> *Peer-to-peer real-time racing with stereophonic binaural audio and 3 difficulty tiers of AI sparring bots.*
 
 Race against friends or sparring partners over low-latency peer-to-peer connections:
 
@@ -234,7 +277,8 @@ Race against friends or sparring partners over low-latency peer-to-peer connecti
 
 ---
 
-## 🎨 Colorway & Theme Customization
+## ┌ 09 ┘ 🎨 COLORWAY & ARCHITECTURAL THEME SYSTEM
+> *A pristine all-white wireframe chassis with dynamic 1-click theme accents and classic nocturne themes.*
 
 MechType features a **Pristine All-White Architectural Wireframe** design inspired by Swiss graphic design, with 4 instant-switch accent colorways:
 
@@ -249,7 +293,8 @@ Switch themes anytime using the quick-picker circles in the top navigation bar o
 
 ---
 
-## ⌨️ Keyboard Shortcuts & Hotkeys
+## ┌ 10 ┘ ⌨️ KEYBOARD SHORTCUTS & HOTKEYS
+> *Master MechType entirely from the home row without touching the mouse.*
 
 | Shortcut | Action | Description |
 | :--- | :--- | :--- |
@@ -261,7 +306,8 @@ Switch themes anytime using the quick-picker circles in the top navigation bar o
 
 ---
 
-## 🛠️ Technical Architecture & Project Structure
+## ┌ 11 ┘ 🛠️ SYSTEM ARCHITECTURE & CODEBASE STRUCTURE
+> *Clean, modular, 100% client-side architecture with zero build errors and offline capability.*
 
 ```
 MechType/
@@ -318,7 +364,7 @@ MechType/
 
 ---
 
-## 🚀 Getting Started & Local Setup
+## ┌ 12 ┘ 🚀 QUICKSTART & LOCAL SETUP
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (version 18.0 or higher)
@@ -356,7 +402,7 @@ The output will be placed in the `dist/` directory, ready for deployment to Clou
 
 ---
 
-## 📜 License
+## 📜 LICENSE
 
 MechType is open-source software licensed under the **MIT License**. Feel free to use, modify, and distribute with attribution.
 
